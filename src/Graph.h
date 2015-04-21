@@ -53,8 +53,6 @@ public:
 	bool operator<(const Vertex<T> vertex);
 
 	Vertex* path;
-
-	void updateEdgeFlow(unsigned int index, float f);
 };
 
 
@@ -135,14 +133,6 @@ int Vertex<T>::getIndegree() const {
 	return this->indegree;
 }
 
-template <class T>
-void Vertex<T>::updateEdgeFlow(unsigned int index, float f)
-{
-	if (index >= adj.size())
-		return;
-	adj[index].flow = f;
-}
-
 
 
 /* ================================================================================================
@@ -154,10 +144,8 @@ class Edge {
 	Vertex<T> * dest;
 	Vertex<T> * orig;
 	double weight;
-	double flow;
 public:
 	Edge(Vertex<T> *d, double w, double f=0);
-	double getFlow() const;
 	double getWeight() const;
 	Vertex<T> *getDest() const;
 	bool operator<(const Edge<T> &other) const;
@@ -167,12 +155,7 @@ public:
 };
 
 template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w, double f): dest(d), weight(w), flow(f){}
-
-template <class T>
-double Edge<T>::getFlow() const {
-	return flow;
-}
+Edge<T>::Edge(Vertex<T> *d, double w, double f): dest(d), weight(w){}
 
 template <class T>
 double Edge<T>::getWeight() const {
@@ -228,7 +211,6 @@ public:
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
 
-	//exercicio 5
 	Vertex<T>* getVertex(const T &v) const;
 	void resetIndegrees();
 	vector<Vertex<T>*> getSources() const;
@@ -238,7 +220,6 @@ public:
 	void unweightedShortestPath(const T &v);
 	bool isDAG();
 
-	//exercicio 6
 	void bellmanFordShortestPath(const T &s);
 	void dijkstraShortestPath(const T &s);
 	void floydWarshallShortestPath();
@@ -246,14 +227,7 @@ public:
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest);
 	void getfloydWarshallPathAux(int index1, int index2, vector<T> & res);
 
-	//exercicio 8
 	Graph<T> clone();
-	void resetEdgeFlow();
-	//vector<Vertex<T>*> calculatePrim();
-	//vector<Vertex<T>*> calculateKruskal();
-	//vector<Vertex<T>*> calculateFordFulkerson(T source);
-	//float calculateFordFulkerson(Vertex<T>* current, Vertex<T>* parent, float min, Graph<T>* gf, Graph<T>* gr, vector<Vertex<T>*> visited);
-
 };
 
 
@@ -821,17 +795,6 @@ void Graph<T>::floydWarshallShortestPath() {
 
 }
 
-
-
-template <class T>
-void Graph<T>::resetEdgeFlow()
-{
-	for (unsigned int i = 0; i < vertexSet.size(); i++)
-	{
-		for (unsigned int a = 0; a < vertexSet[i]->adj.size(); a++)
-			vertexSet[i]->adj[a].flow = 0;
-	}
-}
 
 template <class T>
 Graph<T> Graph<T>::clone()

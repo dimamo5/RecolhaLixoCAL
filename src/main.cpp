@@ -17,7 +17,7 @@ int main() {
 	vector<Contentor> res;
 	res = g.getfloydWarshallPath(Contentor(1, "inicio", 0, 0),
 			Contentor(5, "fim", 0, 0));
-	cout << res.size() << endl;
+	cout << "Tamanho:" << res.size() << endl;
 
 	//	cout<<res[0].getId()<<endl;
 //	cout<<res[1].getId()<<endl;

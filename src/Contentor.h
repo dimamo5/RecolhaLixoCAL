@@ -18,7 +18,7 @@ public:
 	unsigned int getId() const;
 	void setId(unsigned int id);
 	static unsigned int getNextId();
-	void setNextId(unsigned int nextId);
+	static void setNextId(unsigned int nextId);
 	unsigned int getQuantidadeLixo() const;
 	void setQuantidadeLixo(unsigned int quantidadeLixo);
 	string getRua() const;

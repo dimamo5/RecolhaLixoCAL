@@ -25,7 +25,7 @@ unsigned int Contentor::getNextId() {
 }
 
 void Contentor::setNextId(unsigned int nextId) {
-	this->nextId = nextId;
+	Contentor::nextId = nextId;
 }
 
 unsigned int Contentor::getQuantidadeLixo() const {

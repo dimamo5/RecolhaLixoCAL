@@ -6,9 +6,37 @@
  */
 
 #include "LoadGraph.h"
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 LoadGraph::LoadGraph() {
-	// TODO Auto-generated constructor stub
+}
+
+bool LoadGraph::loadContentores(Graph<Contentor> grafo) {
+	fcaixotes.open("resources/caixotes");
+	if (!fcaixotes.is_open()) {
+		cerr << "Erro abrir ficheiro Caixotes";
+		return false;
+	}
+	unsigned int teste;
+	string s;
+	stringstream ss;
+	getline(fcaixotes, s);
+	ss << s;
+	ss >> teste;
+	Contentor::setNextId(teste);
+
+	while(!fcaixotes.EOF){
+		getline(fcaixotes, s);
+
+	}
 
 }
 
+bool LoadGraph::loadCamioes(vector<Camiao> camioes) {
+}
+
+bool LoadGraph::loadAdjacentes(Graph<Contentor> grafo) {
+}

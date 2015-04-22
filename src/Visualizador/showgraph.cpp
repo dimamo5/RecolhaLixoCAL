@@ -3,46 +3,57 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include "showgraph.h"
 #include "../Contentor.h"
 #include "../Graph.h"
 
+using namespace std;
+
 void showGraph(Graph<Contentor> &grafo) {
-	GraphViewer *gv = new GraphViewer(600, 600, true);
+	GraphViewer *gv = new GraphViewer(800, 800, true);
 
-	//gv->setBackground("resources/merda.jpg");
-
-	gv->createWindow(600, 600);
-
+	gv->createWindow(800, 800);
 
 	gv->defineVertexColor("blue");
 	gv->defineEdgeColor("black");
 
-	gv->addNode(0);
-	gv->addNode(1);
-	gv->addEdge(0, 0, 1, EdgeType::UNDIRECTED);
+	unsigned int id1, id2;
+	string s;
+	stringstream ss;
+
+	for (unsigned int i=0; i < grafo.getVertexSet().size(); i++) {
+		id1 = grafo.getVertexSet()[i]->getInfo().getId();
+		s = grafo.getVertexSet()[i]->getInfo().getRua();
+		gv->addNode(id1);
+		gv->setVertexLabel(id1, s);
+
+		if(grafo.getVertexSet()[i]->getInfo().isPrioritario()){
+			gv->setVertexColor(id1, "yellow");
+		}
+	}
+
+	for (unsigned int vert=0; vert < grafo.getVertexSet().size(); vert++) {
+		for (unsigned int edge=0;
+				edge < grafo.getVertexSet()[vert]->getAdj().size(); edge++) {
+			id1 = grafo.getVertexSet()[vert]->getInfo().getId();
+			id2 =
+					grafo.getVertexSet()[vert]->getAdj()[edge].getDest()->getInfo().getId();
+
+			ss<<grafo.getVertexSet()[vert]->getAdj()[edge].getWeight();
+
+			gv->addEdge(vert*10+edge, id1, id2, EdgeType::DIRECTED);
+			gv->setEdgeLabel(vert*10+edge,ss.str());
+			ss.str("");
+		}
+	}
+
 
 #ifdef __linux__
 	sleep(1);
 #else
 	Sleep(100); // use sleep(1) in linux ; Sleep(100) on Windows
 #endif
-
-	gv->removeEdge(0);
-	gv->removeNode(1);
-	gv->addNode(2);
-
-	gv->rearrange();
-
-	Sleep(100);
-
-	gv->addEdge(1, 0, 2, EdgeType::UNDIRECTED);
-
-	gv->setVertexLabel(0, "Isto e um no");
-	gv->setEdgeLabel(1, "Isto e uma aresta");
-
-	gv->setVertexColor(2, "green");
-	gv->setEdgeColor(1, "yellow");
 
 	gv->rearrange();
 

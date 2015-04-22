@@ -24,5 +24,6 @@ public:
 	void setQuantidadeLixo(unsigned int quantidadeLixo);
 	string getRua() const;
 	void setRua(string rua);
+	bool isPrioritario();
 };
 #endif

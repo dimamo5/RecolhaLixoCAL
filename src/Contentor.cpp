@@ -51,3 +51,14 @@ string Contentor::getRua() const {
 void Contentor::setRua(string rua) {
 	this->rua = rua;
 }
+
+bool Contentor::isPrioritario() {
+	if(quantidadeMaxima==0){
+		return false;
+	}
+
+	if(((double)quantidadeLixo/quantidadeMaxima)>limite){
+		return true;
+
+	}else return false;
+}

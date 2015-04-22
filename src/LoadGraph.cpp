@@ -100,8 +100,6 @@ bool LoadGraph::loadAdjacentes(Graph<Contentor> &grafo) {
 		getline(fadj, s);
 		stringstream(s) >> peso;
 
-		cout << idV1 << " " << idV2 << " " << peso << endl;
-
 		grafo.addEdge(Contentor(idV1, "tempVertex1", 0, 0),
 				Contentor(idV2, "tempVertex2", 0, 0), peso,0);
 

@@ -8,9 +8,17 @@ Contentor::Contentor(){
 	this->quantidadeLixo=0;
 	this->rua="Rua XPTO";
 }
-Contentor::Contentor(unsigned int id,string rua,unsigned int quantidadeLixo):id(id),rua(rua),quantidadeLixo(quantidadeLixo){
+Contentor::Contentor(unsigned int id,string rua,unsigned int quantidadeLixo,unsigned int quantidadeMaxima):id(id),rua(rua),quantidadeLixo(quantidadeLixo),quantidadeMaxima(quantidadeMaxima){
 }
 
+
+bool Contentor::operator==(const Contentor &c2) const{
+	if(this->id==c2.id){
+		return true;
+	}else{
+		return false;
+	}
+}
 
 unsigned int Contentor::getId() const {
 	return id;

@@ -24,7 +24,7 @@ public:
 	unsigned int getQuantidadeLixo() const;
 	void setQuantidadeLixo(unsigned int quantidadeLixo);
 	static unsigned int getNextId();
-	void setNextId(unsigned int nextId);
+	static void setNextId(unsigned int nextId);
 };
 
 #endif /* CAMIAO_H_ */

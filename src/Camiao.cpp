@@ -50,7 +50,7 @@ unsigned int Camiao::getNextId() {
 }
 
 void Camiao::setNextId(unsigned int nextId) {
-	this->nextId = nextId;
+	Camiao::nextId = nextId;
 }
 
 

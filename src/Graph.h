@@ -226,6 +226,8 @@ public:
 	int edgeCost(int vOrigIndex, int vDestIndex);
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest);
 	void getfloydWarshallPathAux(int index1, int index2, vector<T> & res);
+	void printSquareArray(int ** arr, unsigned int size);
+
 
 	Graph<T> clone();
 };
@@ -732,8 +734,8 @@ int Graph<T>::edgeCost(int vOrigIndex, int vDestIndex)
 	return INT_INFINITY;
 }
 
-
-void printSquareArray(int ** arr, unsigned int size)
+template<class T>
+void Graph<T>::printSquareArray(int ** arr, unsigned int size)
 {
 	for(unsigned int k = 0; k < size; k++)
 	{
@@ -813,8 +815,4 @@ Graph<T> Graph<T>::clone()
 	return ret;
 }
 
-
-
-
-
-#endif /* GRAPH_H_ */
+#endif

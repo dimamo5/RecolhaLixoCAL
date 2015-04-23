@@ -58,7 +58,7 @@ void showGraph(Graph<Contentor> &grafo) {
 #ifdef __linux__
 	sleep(1);
 #else
-	Sleep(10); // use sleep(1) in linux ; Sleep(100) on Windows
+	Sleep(100); // use sleep(1) in linux ; Sleep(100) on Windows
 #endif
 
 	gv->rearrange();

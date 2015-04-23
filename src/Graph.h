@@ -51,7 +51,7 @@ public:
 	Vertex<T>* getPath() const;
 
 	bool isVisited();
-	bool setVisited(bool v);
+	void setVisited(bool v);
 
 	bool operator<(const Vertex<T> vertex);
 
@@ -64,7 +64,7 @@ bool Vertex<T>::isVisited() {
 }
 
 template<class T>
-bool Vertex<T>::setVisited(bool v) {
+void Vertex<T>::setVisited(bool v) {
 	this->visited = v;
 }
 

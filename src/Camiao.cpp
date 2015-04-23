@@ -53,4 +53,13 @@ void Camiao::setNextId(unsigned int nextId) {
 	Camiao::nextId = nextId;
 }
 
+void Camiao::addContentor(Contentor c){
+	this->quantidadeLixo+=c.getQuantidadeLixo();
+
+	rota.push_back(c);
+}
+
+vector<Contentor> Camiao::getRota() const{
+	return rota;
+}
 

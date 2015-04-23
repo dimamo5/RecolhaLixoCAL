@@ -8,6 +8,7 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
 void nearestNeighbour(Graph<Contentor> &grafo);
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
+void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao);
 
 int main() {
 	Graph<Contentor> g, newG;
@@ -26,6 +27,10 @@ int main() {
 
 	mapPath(g, newG);
 
+	Camiao c= Camiao(3,0,INT_MAX);
+
+	calcRotaCamiao(g,c);
+
 	showGraph(g);
 
 	showGraph(newG);
@@ -41,7 +46,7 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
 	vector<Contentor> contentorPrioritarios;
 
-	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
 
 		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			contentorPrioritarios.push_back(grafo.getVertexSet()[i]->getInfo());
@@ -111,7 +116,7 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 
 	unsigned int id1, id2;
 
-	for (unsigned int i=0; i < newGrafo.getNumVertex(); i++) {
+	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
 		if (newGrafo.getVertexSet()[i]->path != NULL) {
 			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
 			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
@@ -136,5 +141,18 @@ Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id) {
 		}
 	}
 	return NULL;
+}
+
+void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao) {
+
+	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
+
+	camiao.addContentor(actual->getInfo());
+
+	while (actual->path != NULL) {
+			camiao.addContentor(actual->path->getInfo());
+			actual=actual->path;
+	}
+
 }
 

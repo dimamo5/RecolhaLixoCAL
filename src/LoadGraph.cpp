@@ -37,8 +37,9 @@ bool LoadGraph::loadContentores(Graph<Contentor> &grafo) {
 		getline(fcaixotes, s);
 		stringstream(s) >> quantidadeMaxima;
 
-		//cout << id << " " << rua << " " << quantidadeLixo << " "
-		//		<< quantidadeMaxima << endl;
+
+//		cout << id << " " << rua << " " << quantidadeLixo << " "
+//				<< quantidadeMaxima << endl;
 
 		grafo.addVertex(
 				*new Contentor(id, rua, quantidadeLixo, quantidadeMaxima));

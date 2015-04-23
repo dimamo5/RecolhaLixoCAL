@@ -1,5 +1,5 @@
 #include "Contentor.h"
-
+#include <iostream>
 unsigned int Contentor::nextId=1; //Id Comeca a 1
 
 Contentor::Contentor(){
@@ -62,3 +62,7 @@ bool Contentor::isPrioritario() {
 
 	}else return false;
 }
+
+unsigned int Contentor::getQuantidadeMaxima() const {
+		return quantidadeMaxima;
+	}

@@ -22,32 +22,33 @@ void showGraph(Graph<Contentor> &grafo) {
 	string s;
 	stringstream ss;
 
-	for (unsigned int i=0; i < grafo.getVertexSet().size(); i++) {
+	for (unsigned int i = 0; i < grafo.getVertexSet().size(); i++) {
 		id1 = grafo.getVertexSet()[i]->getInfo().getId();
 		s = grafo.getVertexSet()[i]->getInfo().getRua();
 		gv->addNode(id1);
 		gv->setVertexLabel(id1, s);
 
-		if(grafo.getVertexSet()[i]->getInfo().isPrioritario()){
+		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			gv->setVertexColor(id1, "yellow");
+		} else if (grafo.getVertexSet()[i]->getInfo().getQuantidadeMaxima()==0) {
+			gv->setVertexColor(id1, "red");
 		}
 	}
 
-	for (unsigned int vert=0; vert < grafo.getVertexSet().size(); vert++) {
-		for (unsigned int edge=0;
+	for (unsigned int vert = 0; vert < grafo.getVertexSet().size(); vert++) {
+		for (unsigned int edge = 0;
 				edge < grafo.getVertexSet()[vert]->getAdj().size(); edge++) {
 			id1 = grafo.getVertexSet()[vert]->getInfo().getId();
 			id2 =
 					grafo.getVertexSet()[vert]->getAdj()[edge].getDest()->getInfo().getId();
 
-			ss<<grafo.getVertexSet()[vert]->getAdj()[edge].getWeight();
+			ss << grafo.getVertexSet()[vert]->getAdj()[edge].getWeight();
 
-			gv->addEdge(vert*10+edge, id1, id2, EdgeType::DIRECTED);
-			gv->setEdgeLabel(vert*10+edge,ss.str());
+			gv->addEdge(vert * 10 + edge, id1, id2, EdgeType::DIRECTED);
+			gv->setEdgeLabel(vert * 10 + edge, ss.str());
 			ss.str("");
 		}
 	}
-
 
 #ifdef __linux__
 	sleep(1);

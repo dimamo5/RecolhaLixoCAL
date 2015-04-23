@@ -50,10 +50,23 @@ public:
 	vector<Edge<T> > getAdj() const;
 	Vertex<T>* getPath() const;
 
+	bool isVisited();
+	bool setVisited(bool v);
+
 	bool operator<(const Vertex<T> vertex);
 
-	Vertex* path;
+	Vertex* path=NULL;
 };
+
+template<class T>
+bool Vertex<T>::isVisited() {
+	return this->visited;
+}
+
+template<class T>
+bool Vertex<T>::setVisited(bool v) {
+	this->visited = v;
+}
 
 template<class T>
 struct vertex_greater_than {
@@ -190,8 +203,8 @@ class Graph {
 	void getPathTo(Vertex<T> *origin, list<T> &res);
 
 	//exercicio 6
-	int ** W;   //weight
-	int ** P;   //path
+	int ** W=NULL;   //weight
+	int ** P=NULL;   //path
 
 public:
 	bool addVertex(const T &in);
@@ -203,6 +216,7 @@ public:
 	int maxNewChildren(Vertex<T> *v, T &inf) const;
 	vector<Vertex<T> *> getVertexSet() const;
 	int getNumVertex() const;
+	int ** getW() const;
 
 	Vertex<T>* getVertex(const T &v) const;
 	void resetIndegrees();
@@ -222,7 +236,6 @@ public:
 	void printSquareArray(int ** arr, unsigned int size);
 	int getfloydWarshallWeigth(const T &origin, const T &dest);
 
-
 	Graph<T> clone();
 };
 
@@ -240,6 +253,11 @@ int Graph<T>::getNumCycles() {
 	numCycles = 0;
 	dfsVisit();
 	return this->numCycles;
+}
+
+template<class T>
+int ** Graph<T>::getW() const{
+	return W;
 }
 
 template<class T>
@@ -570,7 +588,7 @@ int Graph<T>::getfloydWarshallWeigth(const T &origin, const T &dest) {
 	//se nao foi encontrada solucao possivel, retorna lista vazia
 	if (W[originIndex][destinationIndex] == INT_INFINITY) {
 		return -1;
-	}else{
+	} else {
 		return W[originIndex][destinationIndex];
 	}
 

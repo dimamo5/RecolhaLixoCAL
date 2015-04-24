@@ -45,7 +45,10 @@ public:
 	T getInfo() const;
 	void setInfo(T info);
 
+	bool getVisited();
+	void setVisited(bool val);
 	int getDist() const;
+	void setDist(int val);
 	int getIndegree() const;
 	vector<Edge<T> > getAdj() const;
 	Vertex<T>* getPath() const;
@@ -80,7 +83,7 @@ bool Vertex<T>::removeEdgeTo(Vertex<T> *d) {
 //atualizado pelo exercício 5
 template<class T>
 Vertex<T>::Vertex(T in) :
-		info(in), visited(false), processing(false), indegree(0), dist(0) {
+info(in), visited(false), processing(false), indegree(0), dist(0) {
 	path = NULL;
 }
 
@@ -99,6 +102,16 @@ void Vertex<T>::addEdge(Vertex<T> *dest, double w, double f) {
 }
 
 template<class T>
+bool Vertex<T>::getVisited(){
+	return this->visited;
+}
+template<class T>
+void Vertex<T>::setVisited(bool val){
+	this->visited = val;
+}
+
+
+template<class T>
 T Vertex<T>::getInfo() const {
 	return this->info;
 }
@@ -106,6 +119,10 @@ T Vertex<T>::getInfo() const {
 template<class T>
 int Vertex<T>::getDist() const {
 	return this->dist;
+}
+template<class T>
+void Vertex<T>::setDist(int val){
+	this->dist = val;
 }
 
 template<class T>
@@ -149,7 +166,7 @@ public:
 
 template<class T>
 Edge<T>::Edge(Vertex<T> *d, double w, double f) :
-		dest(d), weight(w) {
+dest(d), weight(w) {
 }
 
 template<class T>

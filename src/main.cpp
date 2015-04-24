@@ -4,6 +4,12 @@
 using namespace std;
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
+void tsp_BruteForce(Graph<Contentor> &grafo);
+vector<string> dfs(Graph<Contentor> &g) ;
+void dfs(Vertex<Contentor> *v, vector<string> &res,int vertexSetSize, int &min);
+
+int min_dist = INT_INFINITY;
+vector<string> route;
 
 int main() {
 	Graph<Contentor> g,newG;
@@ -16,15 +22,20 @@ int main() {
 	lg.loadAdjacentes(g);
 
 	g.floydWarshallShortestPath();
-	vector<Contentor> res;
-	res = g.getfloydWarshallPath(Contentor(1, "inicio", 0, 0),Contentor(7, "fim", 0, 0));
-	cout << "Tamanho:" << res.size() << endl;
+
+	//	vector<Contentor> res;
+	//	res = g.getfloydWarshallPath(Contentor(1, "inicio", 0, 0),Contentor(7, "fim", 0, 0));
+	//	cout << "Tamanho:" << res.size() << endl;
 
 	showGraph(g);
 
 	newG=newWorkingGraph(g);
 
-	showGraph(newG);
+	//showGraph(newG);
+
+	tsp_BruteForce(newG);
+	//return 0;
+
 
 	cin.get();
 	return 0;

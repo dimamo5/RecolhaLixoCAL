@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "graphviewer.h"
 #include <fstream>
+#include <vector>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -30,22 +31,26 @@ void showGraph(Graph<Contentor> &grafo) {
 
 		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			gv->setVertexColor(id1, "yellow");
-		} else if (grafo.getVertexSet()[i]->getInfo().getQuantidadeMaxima()==0) {
+		} else if (grafo.getVertexSet()[i]->getInfo().getQuantidadeMaxima() == 0) {
 			gv->setVertexColor(id1, "red");
 		}
 	}
 
+	gv->rearrange();
+
 	for (unsigned int vert = 0; vert < grafo.getVertexSet().size(); vert++) {
-		for (unsigned int edge = 0;
-				edge < grafo.getVertexSet()[vert]->getAdj().size(); edge++) {
+		for (unsigned int edge = 0; edge < grafo.getVertexSet()[vert]->getAdj().size(); edge++) {
 			id1 = grafo.getVertexSet()[vert]->getInfo().getId();
-			id2 =
-					grafo.getVertexSet()[vert]->getAdj()[edge].getDest()->getInfo().getId();
+			id2 = grafo.getVertexSet()[vert]->getAdj()[edge].getDest()->getInfo().getId();
 
-			ss << grafo.getVertexSet()[vert]->getAdj()[edge].getWeight();
+			if (grafo.getVertexSet()[vert]->path != NULL && grafo.getVertexSet()[vert]->path->getInfo().getId() == id2) {
+				gv->setEdgeColor(id1 * 100 + id2, "green");
+				gv->setEdgeThickness(id1 * 100 + id2, 3);
+			}
 
-			gv->addEdge(vert * 10 + edge, id1, id2, EdgeType::DIRECTED);
-			gv->setEdgeLabel(vert * 10 + edge, ss.str());
+			gv->addEdge(id1 * 100 + id2, id1, id2, EdgeType::DIRECTED);
+
+			gv->setEdgeWeight(id1 * 100 + id2, grafo.getVertexSet()[vert]->getAdj()[edge].getWeight());
 			ss.str("");
 		}
 	}
@@ -59,3 +64,4 @@ void showGraph(Graph<Contentor> &grafo) {
 	gv->rearrange();
 
 }
+

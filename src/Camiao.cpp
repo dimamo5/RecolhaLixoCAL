@@ -7,17 +7,19 @@
 
 #include "Camiao.h"
 
-unsigned int Camiao::nextId=1;
+unsigned int Camiao::nextId = 1;
 
 Camiao::Camiao() {
-	this->id=nextId;
+	this->id = nextId;
 	nextId++;
-	this->quantidadeLixo=0;
-	this->capacidadeMaxima=1000;
+	this->quantidadeLixo = 0;
+	this->capacidadeMaxima = 1000;
+	this->distanciaPercorrida=0;
 }
 
-Camiao::Camiao(unsigned int id, unsigned int quantidadeLixo,
-		unsigned int capacidadeMaxima):id(id),quantidadeLixo(quantidadeLixo),capacidadeMaxima(capacidadeMaxima) {
+Camiao::Camiao(unsigned int id, unsigned int quantidadeLixo, unsigned int capacidadeMaxima) :
+		id(id), quantidadeLixo(quantidadeLixo), capacidadeMaxima(capacidadeMaxima) {
+	this->distanciaPercorrida=0;
 
 }
 
@@ -53,13 +55,20 @@ void Camiao::setNextId(unsigned int nextId) {
 	Camiao::nextId = nextId;
 }
 
-void Camiao::addContentor(Contentor c){
-	this->quantidadeLixo+=c.getQuantidadeLixo();
+void Camiao::addContentor(Contentor c) {
+	this->quantidadeLixo += c.getQuantidadeLixo();
 
 	rota.push_back(c);
 }
 
-vector<Contentor> Camiao::getRota() const{
+vector<Contentor> Camiao::getRota() const {
 	return rota;
 }
 
+void Camiao::addDist(unsigned int d) {
+	this->distanciaPercorrida += d;
+}
+
+unsigned int Camiao::getDist() const {
+	return distanciaPercorrida;
+}

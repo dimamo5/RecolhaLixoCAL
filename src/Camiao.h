@@ -17,6 +17,7 @@ private:
 	unsigned int id;
 	unsigned int quantidadeLixo;
 	unsigned int capacidadeMaxima;
+	unsigned int distanciaPercorrida;
 
 	vector<Contentor> rota;
 public:
@@ -30,8 +31,12 @@ public:
 	void setQuantidadeLixo(unsigned int quantidadeLixo);
 	static unsigned int getNextId();
 	static void setNextId(unsigned int nextId);
-	void addContentor(Contentor c);
 	vector<Contentor> getRota() const;
+	void addContentor(Contentor c);
+	void addDist(unsigned int d);
+	unsigned int getDist() const;
+
+
 };
 
 #endif /* CAMIAO_H_ */

@@ -9,6 +9,12 @@ void nearestNeighbour(Graph<Contentor> &grafo);
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
 void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao);
+void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c);
+void branchBound(Graph<Contentor> &grafo);
+int calcMinRow(int ** W, int size, int row);
+int calcMinColumn(int ** W, int size, int row);
+int calcLowerBound(int ** W, int size, int id);
+void printSquareArray(int ** arr, unsigned int size);
 
 int main() {
 	Graph<Contentor> g, newG;
@@ -21,19 +27,36 @@ int main() {
 
 	g.floydWarshallShortestPath();
 
+//	printSquareArray(g.getW(),11);
+
 	newG = newWorkingGraph(g);
 
 	nearestNeighbour(newG);
 
 	mapPath(g, newG);
 
-	Camiao c= Camiao(3,0,INT_MAX);
+//	Camiao c = Camiao(3, 0, 15000);
+//	Camiao c1 = Camiao(3, 0, 1000);
+//
+//	nearestNeighbourCamiao(newG, c);
+//
+//	cout<<"Lixo Apanhado:"<<c.getQuantidadeLixo()<<endl;
+//
+//	nearestNeighbourCamiao(newG, c1);
+//
+//	cout<<"Lixo Apanhado:"<<c1.getQuantidadeLixo()<<endl;
+//
+//	cout<<"Rota tamanho:"<<c.getRota().size()<<endl;
 
-	calcRotaCamiao(g,c);
+//cout<<newG.getVertexSet()[2]->getInfo().getQuantidadeLixo();
+//calcRotaCamiao(g, c);
+//cout << "Dist Opt:" << c.getDist() << endl;
 
 	showGraph(g);
 
 	showGraph(newG);
+
+	branchBound(g);
 
 	getchar();
 
@@ -78,6 +101,7 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 			}
 		}
 	}
+
 	return workingGraph;
 }
 
@@ -150,9 +174,172 @@ void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao) {
 	camiao.addContentor(actual->getInfo());
 
 	while (actual->path != NULL) {
-			camiao.addContentor(actual->path->getInfo());
-			actual=actual->path;
+		for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
+			if (actual->path->getInfo().getId() == actual->getAdj()[i].getDest()->getInfo().getId()) {
+				camiao.addDist(actual->getAdj()[i].getWeight());
+				break;
+			}
+		}
+
+		camiao.addContentor(actual->path->getInfo());
+		actual = actual->path;
 	}
+}
+
+void branchBound(Graph<Contentor> &grafo) {
+
+	Vertex<Contentor>* actual;
+	actual = findVertexId(grafo, 0);
+
+	actual->lowerBound = 1350;
+
+	for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
+		cout << actual->getAdj()[i].getDest()->getInfo().getId() << ": "
+				<< calcLowerBound(grafo.getW(), grafo.getNumVertex(), actual->getAdj()[i].getDest()->getInfo().getId()) << endl;
+	}
+
+	//calcLowerBound(grafo.getW(), 11, 1);
 
 }
 
+int calcLowerBound(int ** W, int size, int id) {
+	int minX, minY, total = 0;
+	for (int i = 0; i < size; i++) {
+		W[i][id] = INT_INFINITY;
+		W[id][i] = INT_INFINITY;
+
+	}
+
+	printSquareArray(W,11);
+
+	for (int i = 0; i < size; i++) {
+		minX = calcMinRow(W, size, i);
+		for (int j = 0; j < size; j++) {
+			if (W[i][j] != INT_INFINITY) {
+				total += minX;
+				W[i][j] -= minX;
+			}
+		}
+	}
+
+	for (int i = 0; i < size; i++) {
+		minY = calcMinColumn(W, size, i);
+		for (int j = 0; j < size; j++) {
+			if (W[j][i] != INT_INFINITY) {
+				total += minY;
+				W[j][i] -= minY;
+			}
+		}
+	}
+	return total;
+}
+
+int calcMinRow(int ** W, int size, int row) {
+	int min = INT_MAX;
+	for (unsigned int i = 0; i < size; i++) {
+		if (W[row][i] < min) {
+			min = W[row][i];
+		}
+	}
+
+	if (min == INT_INFINITY) {
+		return 0;
+	} else
+		return min;
+}
+
+int calcMinColumn(int ** W, int size, int row) {
+	int min = INT_MAX;
+	for (unsigned int i = 0; i < size; i++) {
+		if (W[i][row] < min) {
+			min = W[i][row];
+		}
+	}
+
+	if (min == INT_INFINITY) {
+		return 0;
+	} else
+		return min;
+}
+
+void printSquareArray(int ** arr, unsigned int size) {
+	for (unsigned int k = 0; k < size; k++) {
+		if (k == 0) {
+			cout << "   ";
+			for (unsigned int i = 0; i < size; i++) {
+				cout << setw(5);
+				cout << i;
+			}
+			cout << endl;
+		}
+
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == 0) {
+				cout << setw(5);
+
+				cout << k;
+			}
+
+			if (arr[k][i] == INT_INFINITY) {
+				cout << setw(5);
+				cout << "-";
+			}
+
+			else {
+				cout << setw(5);
+				cout << arr[k][i];
+			}
+		}
+
+		cout << endl;
+	}
+}
+
+void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+		grafo.getVertexSet()[i]->path = NULL;
+	}
+
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+		grafo.getVertexSet()[i]->setVisited(false);
+	}
+
+	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
+	Vertex<Contentor>* proximo;
+	unsigned int lixoMaior = 0;
+	actual->setVisited(true);
+
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+		for (unsigned int j = 0; j < actual->getAdj().size(); j++) {
+
+			if (actual->getAdj()[j].getDest()->getInfo().getQuantidadeLixo() > lixoMaior && !actual->getAdj()[j].getDest()->isVisited()) {
+				if ((actual->getAdj()[j].getDest()->getInfo().getQuantidadeMaxima() == 0)) {
+					continue;
+				} else {
+					if ((actual->getAdj()[j].getDest()->getInfo().getQuantidadeLixo() + c.getQuantidadeLixo()) < c.getCapacidadeMaxima()) {
+						lixoMaior = actual->getAdj()[j].getDest()->getInfo().getQuantidadeLixo();
+						proximo = actual->getAdj()[j].getDest();
+					}
+				}
+			}
+		}
+
+		//Acabou apanhar lixo
+		if (actual->getInfo() == proximo->getInfo()) {
+			actual->path = grafo.getVertexSet()[grafo.getNumVertex() - 1];
+			c.addContentor(findVertexId(grafo, grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId())->getInfo());
+			return;
+		}
+
+		if (!(proximo->getInfo() == actual->getInfo())) {
+			actual->path = proximo;
+			c.addContentor(actual->path->getInfo());
+
+			proximo->getInfo().setQuantidadeLixo(0);
+		}
+
+		actual = proximo;
+		actual->setVisited(true);
+		lixoMaior = 0;
+	}
+}

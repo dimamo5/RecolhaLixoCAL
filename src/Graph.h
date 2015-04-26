@@ -46,7 +46,6 @@ public:
 	void setInfo(T info);
 
 	bool getVisited();
-	void setVisited(bool val);
 	int getDist() const;
 	void setDist(int val);
 	int getIndegree() const;
@@ -117,10 +116,6 @@ void Vertex<T>::addEdge(Vertex<T> *dest, double w, double f) {
 template<class T>
 bool Vertex<T>::getVisited(){
 	return this->visited;
-}
-template<class T>
-void Vertex<T>::setVisited(bool val){
-	this->visited = val;
 }
 
 

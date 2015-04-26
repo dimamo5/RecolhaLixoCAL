@@ -10,6 +10,7 @@
 #include <climits>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 template<class T> class Edge;
@@ -42,7 +43,7 @@ public:
 	void addEdge(Vertex<T> *dest, double w, double f);
 	bool removeEdgeTo(Vertex<T> *d);
 
-	T getInfo() const;
+	T & getInfo();
 	void setInfo(T info);
 
 	bool getVisited();
@@ -56,6 +57,8 @@ public:
 	void setVisited(bool v);
 
 	bool operator<(const Vertex<T> vertex);
+
+	int lowerBound=-1;
 
 	Vertex* path=NULL;
 };
@@ -120,7 +123,7 @@ bool Vertex<T>::getVisited(){
 
 
 template<class T>
-T Vertex<T>::getInfo() const {
+T & Vertex<T>::getInfo() {
 	return this->info;
 }
 
@@ -774,19 +777,29 @@ void Graph<T>::printSquareArray(int ** arr, unsigned int size) {
 	for (unsigned int k = 0; k < size; k++) {
 		if (k == 0) {
 			cout << "   ";
-			for (unsigned int i = 0; i < size; i++)
-				cout << " " << i + 1 << " ";
+			for (unsigned int i = 0; i < size; i++){
+				cout <<setw(4);
+				cout <<i + 1;
+			}
 			cout << endl;
 		}
 
 		for (unsigned int i = 0; i < size; i++) {
-			if (i == 0)
-				cout << " " << k + 1 << " ";
+			if (i == 0){
+				cout <<setw(4);
 
-			if (arr[k][i] == INT_INFINITY)
-				cout << " - ";
-			else
-				cout << " " << arr[k][i] << " ";
+				cout <<k + 1;
+			}
+
+			if (arr[k][i] == INT_INFINITY){
+				cout <<setw(4);
+				cout << "-";
+			}
+
+			else{
+				cout <<setw(4);
+				cout <<arr[k][i];
+			}
 		}
 
 		cout << endl;
@@ -820,7 +833,6 @@ void Graph<T>::floydWarshallShortestPath() {
 					P[i][j] = k;
 				}
 			}
-
 }
 
 template<class T>

@@ -26,14 +26,18 @@ void showGraph(Graph<Contentor> &grafo) {
 	for (unsigned int i = 0; i < grafo.getVertexSet().size(); i++) {
 		id1 = grafo.getVertexSet()[i]->getInfo().getId();
 		s = grafo.getVertexSet()[i]->getInfo().getRua();
+		ss<<grafo.getVertexSet()[i]->getInfo().getQuantidadeLixo();
 		gv->addNode(id1);
-		gv->setVertexLabel(id1, s);
+		gv->setVertexLabel(id1, s+" "+ ss.str());
+
+		ss.str("");
 
 		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			gv->setVertexColor(id1, "yellow");
 		} else if (grafo.getVertexSet()[i]->getInfo().getQuantidadeMaxima() == 0) {
 			gv->setVertexColor(id1, "red");
 		}
+
 	}
 
 	gv->rearrange();
@@ -45,7 +49,7 @@ void showGraph(Graph<Contentor> &grafo) {
 
 			if (grafo.getVertexSet()[vert]->path != NULL && grafo.getVertexSet()[vert]->path->getInfo().getId() == id2) {
 				gv->setEdgeColor(id1 * 100 + id2, "green");
-				gv->setEdgeThickness(id1 * 100 + id2, 3);
+				gv->setEdgeThickness(id1 * 100 + id2, 5);
 			}
 
 			gv->addEdge(id1 * 100 + id2, id1, id2, EdgeType::DIRECTED);

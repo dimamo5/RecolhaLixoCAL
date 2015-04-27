@@ -17,13 +17,15 @@ int calcMinRow(int ** W, int size, int row);
 int calcMinColumn(int ** W, int size, int row);
 int calcLowerBound(int ** W, int size, int id);
 void printSquareArray(int ** arr, unsigned int size);
+void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W);
+bool visitedPath(vector<int> &path, int id);
 
 //================
-int bound,row,col,reduced_size;
+int bound, row, col, pencost[11];
 
 void branch_Bound(Graph<Contentor> &grafo);
 int allVisited(int v[], int size);
-int checkBounds(int orig, int dest, int**w,int size);
+int checkBounds(int orig, int dest, int**w, int size);
 int calcMinRow(int ** W, int size, int row);
 int calcMinColumn(int ** W, int size, int row);
 int rowReduction(int **w, int size);
@@ -38,10 +40,10 @@ void brute_force(Graph<Contentor> &grafo);
 
 void iguala_arrays(int v[], int a[], int size);
 
-void print(int v[],int size){
+void print(int v[], int size) {
 
-	for(int i = 0; i < size; i++)
-		cout << v[i]  << " "<< endl;
+	for (int i = 0; i < size; i++)
+		cout << v[i] << " " << endl;
 }
 
 //=================
@@ -54,6 +56,7 @@ int main() {
 	lg.loadContentores(g);
 	lg.loadCamioes(camioes);
 	lg.loadAdjacentes(g);
+
 	//============================
 	//g.floydWarshallShortestPath();
 
@@ -66,55 +69,71 @@ int main() {
 	g.floydWarshallShortestPath();
 
 	newG = newWorkingGraph(g);
-	cout << "vertices " << newG.getNumVertex() << endl; cin.get();
-	newG.printSquareArray(newG.getW(),newG.getNumVertex());cin.get();
 
-	brute_force(newG);
-	cin.get();
-	showGraph(newG);
+	newG.floydWarshallShortestPath();
 
-	//cin.get();
+	printSquareArray(newG.getW(), newG.getNumVertex());
 
-	nearestNeighbour(newG);
+	branchBound(newG);
 
-	mapPath(g, newG);
+	//g.printSquareArray(g.getW(), g.getNumVertex());
 
-	Camiao c = Camiao(3, 0, INT_MAX);
+	//cout << checkBounds(0, 5, g.getW(), 11);
 
-	calcRotaCamiao(g, c);
+	/*newG = newWorkingGraph(g);
+	 cout << "vertices " << newG.getNumVertex() << endl;
+	 cin.get();
 
 
-	//	Camiao c = Camiao(3, 0, 15000);
-	//	Camiao c1 = Camiao(3, 0, 1000);
-	//
-	//	nearestNeighbourCamiao(newG, c);
-	//
-	//	cout<<"Lixo Apanhado:"<<c.getQuantidadeLixo()<<endl;
-	//
-	//	nearestNeighbourCamiao(newG, c1);
-	//
-	//	cout<<"Lixo Apanhado:"<<c1.getQuantidadeLixo()<<endl;
-	//
-	//	cout<<"Rota tamanho:"<<c.getRota().size()<<endl;
 
-	//cout<<newG.getVertexSet()[2]->getInfo().getQuantidadeLixo();
-	//calcRotaCamiao(g, c);
-	//cout << "Dist Opt:" << c.getDist() << endl;
 
-	showGraph(g);
+	 newG.printSquareArray(newG.getW(), newG.getNumVertex());
+	 cin.get();
 
-	//showGraph(newG);
+	 brute_force(newG);
+	 cin.get();
+	 showGraph(newG);
 
-	//return 0;
+	 //cin.get();
 
-	branch_Bound(g);
+	 nearestNeighbour(newG);
 
-	getchar();
+	 mapPath(g, newG);
 
+	 Camiao c = Camiao(3, 0, INT_MAX);
+
+	 calcRotaCamiao(g, c);
+
+	 //	Camiao c = Camiao(3, 0, 15000);
+	 //	Camiao c1 = Camiao(3, 0, 1000);
+	 //
+	 //	nearestNeighbourCamiao(newG, c);
+	 //
+	 //	cout<<"Lixo Apanhado:"<<c.getQuantidadeLixo()<<endl;
+	 //
+	 //	nearestNeighbourCamiao(newG, c1);
+	 //
+	 //	cout<<"Lixo Apanhado:"<<c1.getQuantidadeLixo()<<endl;
+	 //
+	 //	cout<<"Rota tamanho:"<<c.getRota().size()<<endl;
+
+	 //cout<<newG.getVertexSet()[2]->getInfo().getQuantidadeLixo();
+	 //calcRotaCamiao(g, c);
+	 //cout << "Dist Opt:" << c.getDist() << endl;
+
+	 showGraph(g);
+
+	 //showGraph(newG);
+
+	 //return 0;
+
+	 branch_Bound(g);
+
+	 getchar();
+	 */
 	cin.get();
 	return 0;
 }
-
 
 //===================================
 void brute_force(Graph<Contentor> &grafo) {
@@ -122,43 +141,44 @@ void brute_force(Graph<Contentor> &grafo) {
 	int sum = 0, min_dist = INT_INFINITY;
 	int size = grafo.getNumVertex();
 
-	int route[size],vert[size];
+	int route[size], vert[size];
 
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		vert[i] = i;
 	}
 
-	grafo.printSquareArray(grafo.getW(),grafo.getNumVertex());cin.get();
+	grafo.printSquareArray(grafo.getW(), grafo.getNumVertex());
+	cin.get();
 
+	while (std::next_permutation(vert + 1, vert + size - 1)) {
 
-	while(std::next_permutation(vert+1,vert+size-1)){
+		print(vert, size);
+		cin.get();
 
-		print(vert,size); cin.get();
+		for (int i = 0; i < size - 1; i++) {
 
-		for(int i = 0; i < size-1; i++){
-
-			if(grafo.getW()[vert[i]][vert[i+1]] == INT_INFINITY)
+			if (grafo.getW()[vert[i]][vert[i + 1]] == INT_INFINITY)
 				sum = INT_INFINITY;
 
-			if(sum != INT_INFINITY)
-				sum += grafo.getW()[vert[i]][vert[i+1]];
+			if (sum != INT_INFINITY)
+				sum += grafo.getW()[vert[i]][vert[i + 1]];
 		}
 
-		if(sum < min_dist){
+		if (sum < min_dist) {
 			min_dist = sum;
-			iguala_arrays(route, vert ,size);
+			iguala_arrays(route, vert, size);
 		}
 		sum = 0;
 	}
 
 	cout << "min_dist " << min_dist << endl;
-	print(route,size);
+	print(route, size);
 
 }
 
-void iguala_arrays(int v[], int a[], int size){
+void iguala_arrays(int v[], int a[], int size) {
 
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		v[i] = a[i];
 	}
 }
@@ -193,14 +213,11 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 				continue;
 			} else {
 				//Se existir arestas entre os vertices
-				res = grafo.getfloydWarshallPath(contentorPrioritarios[i],
-						contentorPrioritarios[j]);
+				res = grafo.getfloydWarshallPath(contentorPrioritarios[i], contentorPrioritarios[j]);
 
 				if (res.size() > 0) {
-					int peso = grafo.getfloydWarshallWeigth(
-							contentorPrioritarios[i], contentorPrioritarios[j]);
-					workingGraph.addEdge(contentorPrioritarios[i],
-							contentorPrioritarios[j], peso);
+					int peso = grafo.getfloydWarshallWeigth(contentorPrioritarios[i], contentorPrioritarios[j]);
+					workingGraph.addEdge(contentorPrioritarios[i], contentorPrioritarios[j], peso);
 				}
 			}
 		}
@@ -208,7 +225,6 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
 	return workingGraph;
 }
-
 
 void nearestNeighbour(Graph<Contentor> &grafo) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
@@ -221,10 +237,8 @@ void nearestNeighbour(Graph<Contentor> &grafo) {
 
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		for (unsigned int j = 0; j < actual->getAdj().size(); j++) {
-			if (actual->getAdj()[j].getWeight() < pesoMinimo
-					&& !actual->getAdj()[j].getDest()->isVisited()) {
-				if ((actual->getAdj()[j].getDest()->getInfo().getQuantidadeMaxima()
-						== 0) && i < grafo.getNumVertex() - 1) {
+			if (actual->getAdj()[j].getWeight() < pesoMinimo && !actual->getAdj()[j].getDest()->isVisited()) {
+				if ((actual->getAdj()[j].getDest()->getInfo().getQuantidadeMaxima() == 0) && i < grafo.getNumVertex() - 1) {
 					continue;
 				} else {
 					pesoMinimo = actual->getAdj()[j].getWeight();
@@ -253,20 +267,17 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
 		}
 
-		vector<Contentor> res = grafo.getfloydWarshallPath(
-				Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
+		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
 
 		if (res.size() != 0) {
 			for (unsigned int i = 0; i < res.size() - 1; i++) {
-				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo,
-						res[i + 1].getId());
+				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo, res[i + 1].getId());
 			}
 
 		}
 
 	}
 }
-
 
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id) {
 	for (unsigned int j = 0; j < grafo.getVertexSet().size(); j++) {
@@ -299,188 +310,278 @@ void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao) {
 
 //========================================
 /*
-void branchBound(Graph<Contentor> &grafo) {
+ void branchBound(Graph<Contentor> &grafo) {
 
-	Vertex<Contentor>* actual;
-	actual = findVertexId(grafo, 0);
+ Vertex<Contentor>* actual;
+ actual = findVertexId(grafo, 0);
 
-	actual->lowerBound = 1350;
+ actual->lowerBound = 1350;
 
-	for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
-		cout << actual->getAdj()[i].getDest()->getInfo().getId() << ": "
-				<< calcLowerBound(grafo.getW(), grafo.getNumVertex(), actual->getAdj()[i].getDest()->getInfo().getId()) << endl;
-	}
+ for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
+ cout << actual->getAdj()[i].getDest()->getInfo().getId() << ": "
+ << calcLowerBound(grafo.getW(), grafo.getNumVertex(), actual->getAdj()[i].getDest()->getInfo().getId()) << endl;
+ }
 
-	//calcLowerBound(grafo.getW(), 11, 1);
+ //calcLowerBound(grafo.getW(), 11, 1);
 
-}
+ }
 
-int calcLowerBound(int ** W, int size, int id) {
-	int minX, minY, total = 0;
+ int calcLowerBound(int ** W, int size, int id) {
+ int minX, minY, total = 0;
 
-	for (int i = 0; i < size; i++) {
-		W[i][id] = INT_INFINITY;
-		W[id][i] = INT_INFINITY;
-	}
+ for (int i = 0; i < size; i++) {
+ W[i][id] = INT_INFINITY;
+ W[id][i] = INT_INFINITY;
+ }
 
-	//printSquareArray(W,11);
+ //printSquareArray(W,11);
 
-	for (int i = 0; i < size; i++) {
-		minX = calcMinRow(W, size, i);
-		for (int j = 0; j < size; j++) {
-			if (W[i][j] != INT_INFINITY) {
-				total += minX;
-				W[i][j] -= minX;
-			}
-		}
-	}
+ for (int i = 0; i < size; i++) {
+ minX = calcMinRow(W, size, i);
+ for (int j = 0; j < size; j++) {
+ if (W[i][j] != INT_INFINITY) {
+ total += minX;
+ W[i][j] -= minX;
+ }
+ }
+ }
 
-	for (int i = 0; i < size; i++) {
-		minY = calcMinColumn(W, size, i);
-		for (int j = 0; j < size; j++) {
-			if (W[j][i] != INT_INFINITY) {
-				total += minY;
-				W[j][i] -= minY;
-			}
-		}
-	}
-	return total;
-}*/
+ for (int i = 0; i < size; i++) {
+ minY = calcMinColumn(W, size, i);
+ for (int j = 0; j < size; j++) {
+ if (W[j][i] != INT_INFINITY) {
+ total += minY;
+ W[j][i] -= minY;
+ }
+ }
+ }
+ return total;
+ }*/
 
-void branch_Bound(Graph<Contentor> &grafo){
+void branch_Bound(Graph<Contentor> &grafo) {
 
 	int size = grafo.getNumVertex();
-	int select[size], edgeCost[size] , min = 0, k = 0;
+	int select[size], edgeCost[size], min = 0, k = 0;
 
-	for(int i=0; i < size; i++) {
+	for (int i = 0; i < size; i++) {
 		select[i] = 0;
 	}
 
-	int row = rowReduction(grafo.getW(),size);
-	int col = colReduction(grafo.getW(),size);
+	int row = rowReduction(grafo.getW(), size);
+	int col = colReduction(grafo.getW(), size);
 
 	bound = row + col;
 
-	while(allVisited(select,size) != 1){
-		for(int i= 0; i< size; i++){
-			if(select[i]==0){
-				edgeCost[i] = checkBounds(k,i,grafo.getW(),size);
-			}
-		}
-		min = INT_INFINITY;
-		for(int i= 0; i< size; i++){
-			if(select[i]==0 && edgeCost[i]< min){
-				min = edgeCost[i];
-				k=i;
-			}
-		}
-		select[k]=1;
+	while (allVisited(select, size) != 1) {
+		int edgeCost[findVertexId(grafo, k)->getAdj().size()];
 
-		for(int i =0; i < size; i++){
+		for (int i = 0; i < size; i++) {
+			if (select[i] == 0) {
+				edgeCost[i] = checkBounds(k, i, grafo.getW(), size);
+			}
+		}
+
+		min = INT_INFINITY;
+
+		for (int i = 0; i < size; i++) {
+			if (select[i] == 0 && edgeCost[i] < min) {
+				min = edgeCost[i];
+				k = i;
+			}
+		}
+		select[k] = 1;
+
+		for (int i = 0; i < size; i++) {
 
 			//grafo.getW()[...][k] = INT_INFINITY;  -> pseudo codigo pouco claro aqui
 		}
-		for(int i =0; i < size; i++){
+		for (int i = 0; i < size; i++) {
 
 			grafo.getW()[i][k] = INT_INFINITY;
 		}
 
 		//grafo.getW()[k][...] = INT_INFINITY; -> pseudo codigo pouco claro aqui
-		row = rowReduction(grafo.getW(),size);
-		col = colReduction(grafo.getW(),size);
+		row = rowReduction(grafo.getW(), size);
+		col = colReduction(grafo.getW(), size);
 	}
 }
 
-int checkBounds(int orig, int dest, int**w,int size){
+void branchBound(Graph<Contentor> &grafo) {
 
-	int pencost[size*size];
+	vector<int> path;
+
+	int row = rowReduction(grafo.getW(), grafo.getNumVertex());
+	int col = colReduction(grafo.getW(), grafo.getNumVertex());
+
+	cout << "Bound inicial:" << (bound = row + col) << endl;
+	int ** newW=NULL;
+	cout << "coco";
+
+	newW = new int *[grafo.getNumVertex()];
+	cout << "coco";
+
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
+		newW[i] = new int[grafo.getNumVertex()];
+		for (int j = 0; j < grafo.getNumVertex(); j++) {
+			newW[i][j] = grafo.getW()[i][j];
+		}
+	}
+
+	cout << "coco";
+	path.push_back(0);
+
+	cout << "coco";
+	branchBoundRec(grafo, path, 0, newW);
+
+}
+
+void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W) {
+
+	Vertex<Contentor>* actual = findVertexId(grafo, id);
+
+	if (path.size() == grafo.getNumVertex() - 1) {
+		path.push_back(grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId());
+		return;
+	}
+	cout << actual->getAdj().size();
+	int minBound = INT_MAX, novoId, idComparar;
+
+	for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
+		idComparar = actual->getAdj()[i].getDest()->getInfo().getId();
+		cout << idComparar << "\t";
+		if (checkBounds(id, idComparar, W, grafo.getNumVertex()) < minBound && !visitedPath(path, idComparar)
+				&& idComparar != grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId()) {
+			minBound = checkBounds(id, actual->getAdj()[i].getDest()->getInfo().getId(), W, grafo.getNumVertex());
+			novoId = actual->getAdj()[i].getDest()->getInfo().getId();
+		}
+	}
+	path.push_back(novoId);
+
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
+		W[id][i] = INT_INFINITY;
+	}
+
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
+		W[i][novoId] = INT_INFINITY;
+	}
+	W[novoId][id] = INT_INFINITY;
+
+	cout << endl << "Id:" << novoId << "Bound:" << minBound << endl;
+
+	rowReduction(W, grafo.getNumVertex());
+	colReduction(W, grafo.getNumVertex());
+
+	branchBoundRec(grafo, path, novoId, W);
+
+}
+
+bool visitedPath(vector<int> &path, int id) {
+	for (unsigned int i = 0; i < path.size(); i++) {
+		if (id == path[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int checkBounds(int orig, int dest, int**w, int size) {
+
 	pencost[0] = bound;
 
 	int reduced_size = size; //actualizar esta variavel convenientemente
-	int reduced[reduced_size][reduced_size];
+	int ** reduced = new int *[size];
 
-	for(int i = 0; i < size ; i++){
-		for(int j = 0; j < size ; j++){
+	for (int i = 0; i < size; i++) {
+		reduced[i] = new int[size];
+		for (int j = 0; j < size; j++) {
 			reduced[i][j] = w[i][j];
 		}
 	}
 
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		reduced[orig][i] = INT_INFINITY;
 	}
 
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		reduced[i][dest] = INT_INFINITY;
 	}
 	reduced[dest][orig] = INT_INFINITY;
-	rowReduction(reduced,reduced_size);
-	colReduction(reduced,reduced_size);
+
+	rowReduction(reduced, reduced_size);
+	colReduction(reduced, reduced_size);
+
 	pencost[dest] = pencost[orig] + row + col + w[orig][dest];
+
 	return pencost[dest];
 }
 
+int allVisited(int v[], int size) {
 
-int allVisited(int v[], int size){
-
-	for(int i = 0; i <size; i++ ){
-		if(v[i] == 0)
+	for (int i = 0; i < size; i++) {
+		if (v[i] == 0)
 			return 0;
 	}
 	return 1;
 }
 
-
 int calcMinRow(int ** W, int size, int row) {
-	int min = INT_MAX;
+	unsigned int min = INT_MAX;
 	for (unsigned int i = 0; i < size; i++) {
-		if (W[row][i] < min) {
+		if (row == i) {
+			continue;
+		} else if (W[row][i] < min) {
 			min = W[row][i];
 		}
 	}
 	return min;
 }
 
-int calcMinColumn(int ** W, int size, int row) {
-	int min = INT_MAX;
+int calcMinColumn(int ** W, int size, int col) {
+	unsigned int min = INT_MAX;
 	for (unsigned int i = 0; i < size; i++) {
-		if (W[i][row] < min) {
-			min = W[i][row];
+		if (col == i) {
+			continue;
+		} else if (W[i][col] < min) {
+			min = W[i][col];
 		}
 	}
+
 	return min;
 }
 
-int rowReduction(int ** w, int size){
+int rowReduction(int ** w, int size) {
 
-	int row = 0;
+	row = 0;
+	int rmin;
 
-	for(int i= 0; i < size; i++ ){
-		int rmin = calcMinRow(w, size, i);
+	for (int i = 0; i < size; i++) {
+		rmin = calcMinRow(w, size, i);
 
-		if(rmin != INT_INFINITY)
+		if (rmin != INT_INFINITY)
 			row += rmin;
 
-		for(int j = 0; j < size; j++){
-			if(w[i][j] != INT_INFINITY)
+		for (int j = 0; j < size; j++) {
+			if (!(w[i][j] == INT_INFINITY || i == j))
 				w[i][j] -= rmin;
 		}
 	}
 	return row;
 }
 
-int colReduction(int **w, int size){
+int colReduction(int **w, int size) {
 
-	int col = 0;
+	col = 0;
+	int cmin;
 
-	for(int i= 0; i < size; i++ ){
-		int cmin = calcMinColumn(w, size, i);
+	for (int i = 0; i < size; i++) {
+		cmin = calcMinColumn(w, size, i);
 
-		if(cmin != INT_INFINITY)
+		if (cmin != INT_INFINITY)
 			col += cmin;
 
-		for(int j = 0; j < size; j++){
-			if(w[i][j] != INT_INFINITY)
-				w[i][j] -= cmin;
+		for (int j = 0; j < size; j++) {
+			if (!(w[j][i] == INT_INFINITY || i == j))
+				w[j][i] -= cmin;
 		}
 	}
 	return col;
@@ -534,5 +635,38 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 		actual = proximo;
 		actual->setVisited(true);
 		lixoMaior = 0;
+	}
+}
+
+void printSquareArray(int ** arr, unsigned int size) {
+	for (unsigned int k = 0; k < size; k++) {
+		if (k == 0) {
+			cout << "   ";
+			for (unsigned int i = 0; i < size; i++) {
+				cout << setw(5);
+				cout << i;
+			}
+			cout << endl;
+		}
+
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == 0) {
+				cout << setw(5);
+
+				cout << k;
+			}
+
+			if (arr[k][i] == INT_INFINITY) {
+				cout << setw(5);
+				cout << "-";
+			}
+
+			else {
+				cout << setw(5);
+				cout << arr[k][i];
+			}
+		}
+
+		cout << endl;
 	}
 }

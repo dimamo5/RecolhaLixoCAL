@@ -14,18 +14,18 @@
 
 class Camiao {
 private:
+	static int capacidadeMaxima;
 	static unsigned int nextId;
 	unsigned int id;
 	unsigned int quantidadeLixo;
-	unsigned int capacidadeMaxima;
 	unsigned int distanciaPercorrida;
 
 	vector<Contentor> rota;
 public:
 	Camiao();
 	Camiao(unsigned int id,unsigned int quantidadeLixo,unsigned int capacidadeMaxima);
-	unsigned int getCapacidadeMaxima() const;
-	void setCapacidadeMaxima(unsigned int capacidadeMaxima);
+	static unsigned int getCapacidadeMaxima();
+	static void setCapacidadeMaxima(unsigned int cMaxima);
 	unsigned int getId() const;
 	void setId(unsigned int id);
 	unsigned int getQuantidadeLixo() const;

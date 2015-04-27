@@ -9,26 +9,27 @@
 
 unsigned int Camiao::nextId = 1;
 
+int Camiao::capacidadeMaxima=1000;
+
 Camiao::Camiao() {
 	this->id = nextId;
 	nextId++;
 	this->quantidadeLixo = 0;
-	this->capacidadeMaxima = 1000;
 	this->distanciaPercorrida=0;
 }
 
 Camiao::Camiao(unsigned int id, unsigned int quantidadeLixo, unsigned int capacidadeMaxima) :
-		id(id), quantidadeLixo(quantidadeLixo), capacidadeMaxima(capacidadeMaxima) {
+		id(id), quantidadeLixo(quantidadeLixo) {
 	this->distanciaPercorrida=0;
 
 }
 
-unsigned int Camiao::getCapacidadeMaxima() const {
+unsigned int Camiao::getCapacidadeMaxima() {
 	return capacidadeMaxima;
 }
 
-void Camiao::setCapacidadeMaxima(unsigned int capacidadeMaxima) {
-	this->capacidadeMaxima = capacidadeMaxima;
+void Camiao::setCapacidadeMaxima(unsigned int cMaxima) {
+	capacidadeMaxima = cMaxima;
 }
 
 unsigned int Camiao::getId() const {

@@ -50,37 +50,6 @@ bool LoadGraph::loadContentores(Graph<Contentor> &grafo) {
 
 }
 
-bool LoadGraph::loadCamioes(vector<Camiao> &camioes) {
-	ifstream fcamioes;
-	fcamioes.open("resources/camioes.txt");
-	if (!fcamioes.is_open()) {
-		cerr << "Erro abrir ficheiro Caixotes";
-		return false;
-	}
-	unsigned int id, capacidadeMaxima;
-	string s;
-	stringstream ss;
-	getline(fcamioes, s);
-	ss << s;
-	ss >> id;
-	Camiao::setNextId(id);
-
-	while (!fcamioes.eof()) {
-		getline(fcamioes, s, ',');
-		stringstream(s) >> id;
-
-		getline(fcamioes, s);
-		stringstream(s) >> capacidadeMaxima;
-
-		//cout << id << " " << capacidadeMaxima << endl;
-
-		camioes.push_back(Camiao(id, 0, capacidadeMaxima));
-
-	}
-
-	return true;
-}
-
 bool LoadGraph::loadAdjacentes(Graph<Contentor> &grafo) {
 	ifstream fadj;
 	fadj.open("resources/adj.txt");

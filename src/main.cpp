@@ -45,7 +45,6 @@ int main() {
 	LoadGraph lg;
 
 	lg.loadContentores(g);
-	lg.loadCamioes(camioes);
 	lg.loadAdjacentes(g);
 
 	//============================
@@ -63,13 +62,17 @@ int main() {
 
 	newG.floydWarshallShortestPath();
 
-	branchBound(newG);
+	//branchBound(newG);
 
-	//brute_force(newG);
+	Camiao c = Camiao(3, 0, 10000);
+
+	nearestNeighbourCamiao(newG, c);
+
+	mapPath(g, newG);
 
 	showGraph(newG);
 
-	mapPath(g, newG);
+	c.calcRotaCamiao(g);
 
 	showGraph(g);
 
@@ -93,7 +96,7 @@ int main() {
 
 
 
-	 Camiao c = Camiao(3, 0, INT_MAX);
+
 
 	 calcRotaCamiao(g, c);
 
@@ -127,7 +130,6 @@ int main() {
 	cin.get();
 	return 0;
 }
-
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
@@ -192,7 +194,6 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 
 	}
 }
-
 
 void printSquareArray(int ** arr, unsigned int size) {
 	for (unsigned int k = 0; k < size; k++) {

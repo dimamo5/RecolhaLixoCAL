@@ -9,6 +9,7 @@
 #define CAMIAO_H_
 
 #include "Contentor.h"
+#include "Graph.h"
 #include <vector>
 
 class Camiao {
@@ -35,6 +36,7 @@ public:
 	void addContentor(Contentor c);
 	void addDist(unsigned int d);
 	unsigned int getDist() const;
+	void calcRotaCamiao(Graph<Contentor> &grafo);
 
 
 };

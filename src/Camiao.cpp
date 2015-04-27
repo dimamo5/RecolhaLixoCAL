@@ -72,3 +72,23 @@ void Camiao::addDist(unsigned int d) {
 unsigned int Camiao::getDist() const {
 	return distanciaPercorrida;
 }
+
+void Camiao::calcRotaCamiao(Graph<Contentor> &grafo) {
+
+	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
+
+	this->addContentor(actual->getInfo());
+
+	while (actual->path != NULL) {
+
+		for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
+			if (actual->path->getInfo().getId() == actual->getAdj()[i].getDest()->getInfo().getId()) {
+				this->addDist(actual->getAdj()[i].getWeight());
+				break;
+			}
+		}
+
+		this->addContentor(actual->path->getInfo());
+		actual = actual->path;
+	}
+}

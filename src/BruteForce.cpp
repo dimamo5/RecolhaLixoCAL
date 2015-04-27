@@ -41,41 +41,35 @@ void brute_force(Graph<Contentor> &grafo) {
 	for (unsigned int i = 0; i < size - 1; i++) {
 		grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
 	}
-
-
 }
 
 void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
 
-	int size =0;
-
-	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
-		grafo.getVertexSet()[i]->path = NULL;
-		if(grafo.getVertexSet()[i]->getInfo().isPrioritario())
-			size++;
-	}
-
-	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
-		grafo.getVertexSet()[i]->path = NULL;
-		if(grafo.getVertexSet()[i]->getInfo().isPrioritario())
-			size++;
-	}
-
-
-	int sum = 0, max_peso = 0;//, indice=size-1;
-
+	int sum = 0, max_peso = 0 ;
+	int size =  grafo.getNumVertex(),indice = size-1;
 	int route[size], vert[size];
 
-	for (int i = 0; i < size; i++) {
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+
+		grafo.getVertexSet()[i]->path = NULL;
 		vert[i] = i;
 	}
 
-	while (std::next_permutation(vert + 1, vert + size - 1)) {
+	for(int i = 0; i < size; i++)
+		cout << vert[i] << " ";
 
-		for (int i = 0; i < size - 1; i++) {
+	cout << "size " << size << endl;
+	cin.get();
+
+	//int indice_glob;
+
+	while (std::next_permutation(vert+1, vert + size-1)) {
+
+		for (int i = 0; i < size-1; i++) {
 
 			if(sum + grafo.getVertexSet()[vert[i]]->getInfo().getQuantidadeLixo() <= c.getCapacidadeMaxima()){
 				sum += grafo.getVertexSet()[vert[i]]->getInfo().getQuantidadeLixo();
+				indice = i;
 			}
 			else {
 				indice = i;
@@ -84,57 +78,136 @@ void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
 		}
 
 		if (sum > max_peso) {
+			//		indice_glob = indice;
 			max_peso = sum;
 			iguala_arrays(route, vert, size);
 		}
 		sum = 0;
 	}
 
-	bool cenas = true;
-	if(indice+1 < size){ //actualiza posicao da recolha na rota
-		route[indice+1] = size-1;
-		cenas = false
-				;
+	if(indice +1 < size){
+		route[indice+1] = size -1 ;
 	}
+	else if (indice == size-1)
+		indice--;
 
 	cout << "peso " << max_peso << endl;
 	cout << "size " << size << endl;
-	cout << "ind  " << indice << endl;
+	cout << "indice" << indice << endl;
 
+	int ultimo_ind,counter = indice+1;
 
+	for (unsigned int i = 0; i < size-1, counter > 0; i++) {
 
-	for (unsigned int i = 0; i <= indice; i++) {
+		cout << grafo.getVertexSet()[route[i]]->getInfo().getId() << endl;
 
-		if(cenas){
-			cenas = false;
-			indice == size-1;
-			indice--;
-		}
+		if(grafo.getVertexSet()[route[i]]->getInfo().isPrioritario() || i == 0 || i == indice){
+			ultimo_ind = i;
+			counter--;
 
-
-		if(grafo.getVertexSet()[route[i]]->getInfo().getQuantidadeLixo() != 0 ){
 			c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
 			grafo.getVertexSet()[route[i]]->getInfo().setQuantidadeLixo(0);
-			grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
-		}
-		else if (i == 0){
 
-			for(int j=0; j < size; j++){ //verificar isto
-
-				if(grafo.getVertexSet()[route[i]]->getInfo().isPrioritario()){
-					c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
-					grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[j]];
-				}
+			if(grafo.getVertexSet()[route[i + 1]]->getInfo().isPrioritario()){
+				grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
+				continue;
 			}
 
+			for(int j = i; j <= indice; j++){
 
-		}
-		else if (i == size-1){
-			c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
-			grafo.getVertexSet()[route[indice-1]]->path = grafo.getVertexSet()[route[i]];
+				if(grafo.getVertexSet()[route[j+1]]->getInfo().isPrioritario()){
+					grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[j + 1]];
+					break;
+				}
+			}
 		}
 	}
 
 	cout <<"capacidade camiao " <<  c.getQuantidadeLixo() << endl;
 }
 
+void brute_force_camiao_aux(Graph<Contentor> &grafo,Camiao &c) {
+
+	int sum = 0, max_peso = 0 ,size =0, indice, indice_glob;
+
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+
+		grafo.getVertexSet()[i]->path = NULL;
+
+		if(grafo.getVertexSet()[i]->getInfo().isPrioritario())
+			size++;
+	}
+
+	size+=2; //+2: central + recolha
+
+	int route[size], vert[size];
+
+	vert[0] = 0;
+	vert[size-1] = grafo.getNumVertex()-1;
+
+	for (unsigned int i = 1, j=1; i < grafo.getNumVertex()-1; i++) {//inicializa vert array
+
+		if(grafo.getVertexSet()[i]->getInfo().isPrioritario()){
+			vert[j] = i;
+			j++;
+		}
+	}
+
+	while (std::next_permutation(vert+1, vert + size-1)) {
+
+		for (int i = 0; i < size; i++) {
+
+			if(sum + grafo.getVertexSet()[vert[i]]->getInfo().getQuantidadeLixo() <= c.getCapacidadeMaxima()){
+				sum += grafo.getVertexSet()[vert[i]]->getInfo().getQuantidadeLixo();
+				indice = i;
+				if(sum == c.getCapacidadeMaxima()){
+					break;
+				}
+
+			}
+			else {
+				indice = i;
+				break;
+			}
+		}
+
+		if (sum > max_peso) {
+			indice_glob = indice;
+			max_peso = sum;
+			iguala_arrays(route, vert, size);
+		}
+		sum = 0;
+	}
+
+	//até aqui está tudo bem
+	for(int i = 0; i < size; i++)
+		cout << route[i] << " ";
+
+	cout << "ind_glob "<< indice_glob << endl;
+
+	if( indice_glob < size){
+		cout << "entra"<<endl;
+		route[indice_glob] = grafo.getNumVertex()-1 ;
+	}
+
+	cout << "peso " << max_peso << endl;
+	cout << "size " << size << endl;
+	cout << "indice " << indice_glob << endl;
+
+	for(int i = 0; i < size; i++)
+		cout << route[i] << " ";
+	cin.get();
+
+	for (unsigned int i = 0; i < indice_glob ; i++) {
+
+		cout <<"id:"<<grafo.getVertexSet()[route[i]]->getInfo().getId() << endl;
+
+		c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
+		grafo.getVertexSet()[route[i]]->getInfo().setQuantidadeLixo(0);
+
+		if(i != indice_glob)
+			grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
+	}
+
+	cout <<"capacidade camiao " <<  c.getQuantidadeLixo() << endl;
+}

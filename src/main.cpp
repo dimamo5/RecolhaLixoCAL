@@ -31,28 +31,50 @@ int main() {
 
 	newG = newWorkingGraph(g);
 
+	newG.floydWarshallShortestPath();
+
+	showGraph(newG);
+		cin.get();
+//	brute_force(newG);
+
+//	showGraph(newG);
+//	cin.get();
+
 	//newG.floydWarshallShortestPath();
 
 	//branchBound(newG);
 
 	Camiao c = Camiao(3, 0);
 
+	//nearestNeighbourCamiao(newG, c);
+
 	Camiao c2 = Camiao(1,0);
 
-	brute_force_camiao(newG,c);
+	showGraph(newG);
 
+	brute_force_camiao_aux(newG,c);
+
+	showGraph(newG);
+	cin.get();
+
+	brute_force_camiao_aux(newG,c2);
+
+	showGraph(newG);
+	cin.get();
+
+	//brute_force_camiao(newG,c);
+
+	//nearestNeighbour(newG);
 
 	//nearestNeighbourCamiao(newG, c);
 
 	//Camiao c1 = Camiao(3, 0);
 
-	showGraph(newG);
-	cin.get();
+	//	newG = newWorkingGraph(newG);
+	//	cout << "lol"; cin.get();
 
-//	newG = newWorkingGraph(newG);
-//	cout << "lol"; cin.get();
-
-	brute_force_camiao(newG,c2);
+	//brute_force_camiao(newG,c2);
+	//brute_force_camiao_aux(newG,c2);
 
 	showGraph(newG);
 	cin.get();
@@ -191,22 +213,22 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 		actual = actual->path;
 	}
 
-//	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
-//		if (newGrafo.getVertexSet()[i]->path != NULL) {
-//			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
-//			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
-//		}
-//
-//		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
-//
-//		if (res.size() != 0) {
-//			for (unsigned int i = 0; i < res.size() - 1; i++) {
-//				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo, res[i + 1].getId());
-//			}
-//
-//		}
-//
-//	}
+	//	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
+	//		if (newGrafo.getVertexSet()[i]->path != NULL) {
+	//			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
+	//			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
+	//		}
+	//
+	//		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
+	//
+	//		if (res.size() != 0) {
+	//			for (unsigned int i = 0; i < res.size() - 1; i++) {
+	//				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo, res[i + 1].getId());
+	//			}
+	//
+	//		}
+	//
+	//	}
 }
 
 void printSquareArray(int ** arr, unsigned int size) {

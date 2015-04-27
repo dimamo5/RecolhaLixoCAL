@@ -1,6 +1,7 @@
 #include "LoadGraph.h"
 #include "Visualizador/showgraph.h"
 #include "Graph.h"
+#include "windows.h"
 #include <algorithm>
 
 using namespace std;
@@ -19,6 +20,7 @@ int calcLowerBound(int ** W, int size, int id);
 void printSquareArray(int ** arr, unsigned int size);
 void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W);
 bool visitedPath(vector<int> &path, int id);
+int getVertexIndice(Graph<Contentor> &grafo, int id);
 
 //================
 int bound, row, col, pencost[11];
@@ -72,7 +74,7 @@ int main() {
 
 	newG.floydWarshallShortestPath();
 
-	printSquareArray(newG.getW(), newG.getNumVertex());
+	showGraph(newG);
 
 	branchBound(newG);
 
@@ -186,7 +188,7 @@ void iguala_arrays(int v[], int a[], int size) {
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
-	Graph<Contentor> workingGraph;
+	Graph<Contentor> workingGraph = Graph<Contentor>();
 
 	vector<Contentor> contentorPrioritarios;
 
@@ -308,104 +310,6 @@ void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao) {
 	}
 }
 
-//========================================
-/*
- void branchBound(Graph<Contentor> &grafo) {
-
- Vertex<Contentor>* actual;
- actual = findVertexId(grafo, 0);
-
- actual->lowerBound = 1350;
-
- for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
- cout << actual->getAdj()[i].getDest()->getInfo().getId() << ": "
- << calcLowerBound(grafo.getW(), grafo.getNumVertex(), actual->getAdj()[i].getDest()->getInfo().getId()) << endl;
- }
-
- //calcLowerBound(grafo.getW(), 11, 1);
-
- }
-
- int calcLowerBound(int ** W, int size, int id) {
- int minX, minY, total = 0;
-
- for (int i = 0; i < size; i++) {
- W[i][id] = INT_INFINITY;
- W[id][i] = INT_INFINITY;
- }
-
- //printSquareArray(W,11);
-
- for (int i = 0; i < size; i++) {
- minX = calcMinRow(W, size, i);
- for (int j = 0; j < size; j++) {
- if (W[i][j] != INT_INFINITY) {
- total += minX;
- W[i][j] -= minX;
- }
- }
- }
-
- for (int i = 0; i < size; i++) {
- minY = calcMinColumn(W, size, i);
- for (int j = 0; j < size; j++) {
- if (W[j][i] != INT_INFINITY) {
- total += minY;
- W[j][i] -= minY;
- }
- }
- }
- return total;
- }*/
-
-void branch_Bound(Graph<Contentor> &grafo) {
-
-	int size = grafo.getNumVertex();
-	int select[size], edgeCost[size], min = 0, k = 0;
-
-	for (int i = 0; i < size; i++) {
-		select[i] = 0;
-	}
-
-	int row = rowReduction(grafo.getW(), size);
-	int col = colReduction(grafo.getW(), size);
-
-	bound = row + col;
-
-	while (allVisited(select, size) != 1) {
-		int edgeCost[findVertexId(grafo, k)->getAdj().size()];
-
-		for (int i = 0; i < size; i++) {
-			if (select[i] == 0) {
-				edgeCost[i] = checkBounds(k, i, grafo.getW(), size);
-			}
-		}
-
-		min = INT_INFINITY;
-
-		for (int i = 0; i < size; i++) {
-			if (select[i] == 0 && edgeCost[i] < min) {
-				min = edgeCost[i];
-				k = i;
-			}
-		}
-		select[k] = 1;
-
-		for (int i = 0; i < size; i++) {
-
-			//grafo.getW()[...][k] = INT_INFINITY;  -> pseudo codigo pouco claro aqui
-		}
-		for (int i = 0; i < size; i++) {
-
-			grafo.getW()[i][k] = INT_INFINITY;
-		}
-
-		//grafo.getW()[k][...] = INT_INFINITY; -> pseudo codigo pouco claro aqui
-		row = rowReduction(grafo.getW(), size);
-		col = colReduction(grafo.getW(), size);
-	}
-}
-
 void branchBound(Graph<Contentor> &grafo) {
 
 	vector<int> path;
@@ -414,11 +318,8 @@ void branchBound(Graph<Contentor> &grafo) {
 	int col = colReduction(grafo.getW(), grafo.getNumVertex());
 
 	cout << "Bound inicial:" << (bound = row + col) << endl;
-	int ** newW=NULL;
-	cout << "coco";
 
-	newW = new int *[grafo.getNumVertex()];
-	cout << "coco";
+	int ** newW = new int *[grafo.getNumVertex()];
 
 	for (int i = 0; i < grafo.getNumVertex(); i++) {
 		newW[i] = new int[grafo.getNumVertex()];
@@ -427,32 +328,40 @@ void branchBound(Graph<Contentor> &grafo) {
 		}
 	}
 
-	cout << "coco";
 	path.push_back(0);
 
-	cout << "coco";
 	branchBoundRec(grafo, path, 0, newW);
 
+	path.push_back(getVertexIndice(grafo,grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId()));
+
+}
+
+int getVertexIndice(Graph<Contentor> &grafo, int id) {
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
+		if (grafo.getVertexSet()[i]->getInfo().getId() == id) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W) {
 
-	Vertex<Contentor>* actual = findVertexId(grafo, id);
+	Vertex<Contentor>* actual = grafo.getVertexSet()[id];
 
-	if (path.size() == grafo.getNumVertex() - 1) {
-		path.push_back(grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId());
+	if (path.size() == grafo.getNumVertex()-1) {
 		return;
 	}
-	cout << actual->getAdj().size();
+
 	int minBound = INT_MAX, novoId, idComparar;
 
 	for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
-		idComparar = actual->getAdj()[i].getDest()->getInfo().getId();
-		cout << idComparar << "\t";
+		idComparar = getVertexIndice(grafo,actual->getAdj()[i].getDest()->getInfo().getId());
+
 		if (checkBounds(id, idComparar, W, grafo.getNumVertex()) < minBound && !visitedPath(path, idComparar)
-				&& idComparar != grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId()) {
-			minBound = checkBounds(id, actual->getAdj()[i].getDest()->getInfo().getId(), W, grafo.getNumVertex());
-			novoId = actual->getAdj()[i].getDest()->getInfo().getId();
+				&& idComparar != getVertexIndice(grafo, grafo.getVertexSet()[grafo.getNumVertex() - 1]->getInfo().getId())) {
+			minBound = checkBounds(id, getVertexIndice(grafo, actual->getAdj()[i].getDest()->getInfo().getId()), W, grafo.getNumVertex());
+			novoId = getVertexIndice(grafo, actual->getAdj()[i].getDest()->getInfo().getId());
 		}
 	}
 	path.push_back(novoId);
@@ -464,9 +373,10 @@ void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W)
 	for (int i = 0; i < grafo.getNumVertex(); i++) {
 		W[i][novoId] = INT_INFINITY;
 	}
+
 	W[novoId][id] = INT_INFINITY;
 
-	cout << endl << "Id:" << novoId << "Bound:" << minBound << endl;
+	//cout << endl << "Id:" << novoId << "Bound:" << minBound << endl;
 
 	rowReduction(W, grafo.getNumVertex());
 	colReduction(W, grafo.getNumVertex());
@@ -515,14 +425,6 @@ int checkBounds(int orig, int dest, int**w, int size) {
 	return pencost[dest];
 }
 
-int allVisited(int v[], int size) {
-
-	for (int i = 0; i < size; i++) {
-		if (v[i] == 0)
-			return 0;
-	}
-	return 1;
-}
 
 int calcMinRow(int ** W, int size, int row) {
 	unsigned int min = INT_MAX;

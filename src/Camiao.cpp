@@ -94,6 +94,7 @@ void Camiao::print(){
 	cout<<"Distancia percorrida:"<<this->distanciaPercorrida<<"\tQuantidade Lixo:"<<quantidadeLixo<<endl;
 	cout<<"Rota:";
 	for(int i =0;i<rota.size();i++){
-		cout<<rota[i].getId()<<"\t";
+		cout<<rota[i].getId()<<" ";
 	}
+	cout<<endl;
 }

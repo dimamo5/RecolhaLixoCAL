@@ -8,12 +8,13 @@ using namespace std;
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
 void part1(Graph<Contentor> &g, Graph<Contentor> &newG);
-void part2(Graph<Contentor> g, Graph<Contentor> newG);
+void part2(Graph<Contentor> &g, Graph<Contentor> &newG);
+bool hasPrioritarios(Graph<Contentor> grafo);
+void menu(Graph<Contentor> &g);
 
 int main() {
 
-	Graph<Contentor> g, newG;
-	vector<Camiao> camioes;
+	Graph<Contentor> g;
 	LoadGraph lg;
 
 	lg.loadContentores(g);
@@ -21,24 +22,30 @@ int main() {
 
 	g.floydWarshallShortestPath();
 
-	newG = newWorkingGraph(g);
+	menu(g);
+
+	system("PAUSE");
+	return 0;
+}
+
+void menu(Graph<Contentor> &g) {
+
+	Graph<Contentor> newG = newWorkingGraph(g);
 
 	newG.floydWarshallShortestPath();
 
-	cout << "Escolha Opção" << endl;
+	cout << endl << "Escolha Opção" << endl;
 	cout << "1- Camião com Capacidade Ilimitada passa por todos os pontos." << endl;
 	cout << "2- Camiões com Capacidade Limitada pelo maximo de lixo que podem recolher" << endl;
 
-	char opcao = getchar();
+	char opcao;
+	cin >> opcao;
 
 	if (opcao == '1') {
 		part1(g, newG);
 	} else if (opcao == '2') {
 		part2(g, newG);
 	}
-
-	system("PAUSE");
-	return 0;
 }
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
@@ -161,21 +168,37 @@ void part1(Graph<Contentor> &g, Graph<Contentor> &newG) {
 
 }
 
-void part2(Graph<Contentor> g, Graph<Contentor> newG) {
+void part2(Graph<Contentor> &g, Graph<Contentor> &newG) {
 
-	Camiao c1;
-	nearestNeighbourCamiao(newG, c1);
-	c1.calcRotaCamiao(newG);
-
-	showGraph(newG);
-
-	mapPath(g, newG);
+	char opcao;
 
 	showGraph(g);
 
-	c1.print();
+	cout << "1- Nearest Neighbour adaptado" << endl;
+	cout << "2- Brute Force" << endl;
+	cout << "3- Retornar" << endl;
 
-	Camiao c2;
+	cin >> opcao;
+
+	if (opcao == '1') {
+		while (hasPrioritarios(newG)) {
+			Camiao c;
+			nearestNeighbourCamiao(newG, c);
+			c.calcRotaCamiao(newG);
+			c.print();
+		}
+		menu(g);
+	} else if (opcao == '2') {
+		while (hasPrioritarios(newG)) {
+			Camiao c;
+			brute_force_camiao(newG, c);
+			c.calcRotaCamiao(newG);
+			c.print();
+		}
+		menu(g);
+	} else if (opcao == '3') {
+		menu(g);
+	}
 }
 
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
@@ -189,7 +212,7 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 	while (actual->path != NULL) {
 		id1 = actual->getInfo().getId();
 		id2 = actual->path->getInfo().getId();
-//		cout<<" id1:"<<id1<<" id2:"<<id2<<"->";
+		//		cout<<" id1:"<<id1<<" id2:"<<id2<<"->";
 
 		res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
 
@@ -199,7 +222,7 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 			}
 
 		}
-		cout << actual->getInfo().getId()<<"  ";
+//		cout << actual->getInfo().getId() << "  ";
 		actual = actual->path;
 
 		res.clear();
@@ -237,4 +260,13 @@ void printSquareArray(int ** arr, unsigned int size) {
 
 		cout << endl;
 	}
+}
+
+bool hasPrioritarios(Graph<Contentor> grafo) {
+	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
+			return true;
+		}
+	}
+	return false;
 }

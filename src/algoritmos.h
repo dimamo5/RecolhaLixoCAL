@@ -4,6 +4,7 @@
 
 void iguala_arrays(int v[], int a[], int size);
 void brute_force(Graph<Contentor> &grafo);
+void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c);
 
 void nearestNeighbour(Graph<Contentor> &grafo);
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id);

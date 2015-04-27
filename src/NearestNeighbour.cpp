@@ -41,6 +41,7 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 	}
 
 	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
+	c.addContentor(actual->getInfo());
 	Vertex<Contentor>* proximo;
 	unsigned int lixoMaior = 0;
 	actual->setVisited(true);
@@ -69,8 +70,7 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 
 		if (!(proximo->getInfo() == actual->getInfo())) {
 			actual->path = proximo;
-			c.addContentor(actual->path->getInfo());
-
+			c.addContentor(proximo->getInfo());
 			proximo->getInfo().setQuantidadeLixo(0);
 		}
 
@@ -78,6 +78,7 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 		actual->setVisited(true);
 		lixoMaior = 0;
 	}
+
 }
 
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id) {

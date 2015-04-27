@@ -6,38 +6,9 @@
 using namespace std;
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
-
-void nearestNeighbour(Graph<Contentor> &grafo);
-Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
-void calcRotaCamiao(Graph<Contentor> &grafo, Camiao &camiao);
-void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c);
-void branchBound(Graph<Contentor> &grafo);
-int calcMinRow(int ** W, int size, int row);
-int calcMinColumn(int ** W, int size, int row);
-int calcLowerBound(int ** W, int size, int id);
-void printSquareArray(int ** arr, unsigned int size);
-void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W);
-bool visitedPath(vector<int> &path, int id);
-int getVertexIndice(Graph<Contentor> &grafo, int id);
+Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
 
-//================
-
-void branch_Bound(Graph<Contentor> &grafo);
-int allVisited(int v[], int size);
-int checkBounds(int orig, int dest, int**w, int size);
-int calcMinRow(int ** W, int size, int row);
-int calcMinColumn(int ** W, int size, int row);
-int rowReduction(int **w, int size);
-int colReduction(int **w, int size);
-
-void print(int v[], int size) {
-
-	for (int i = 0; i < size; i++)
-		cout << v[i] << " " << endl;
-}
-
-//=================
 int main() {
 
 	Graph<Contentor> g, newG;
@@ -60,19 +31,43 @@ int main() {
 
 	newG = newWorkingGraph(g);
 
-	newG.floydWarshallShortestPath();
+	//newG.floydWarshallShortestPath();
 
 	//branchBound(newG);
 
-	Camiao c = Camiao(3, 0, 10000);
+	Camiao c = Camiao(3, 0);
 
-	nearestNeighbourCamiao(newG, c);
+	Camiao c2 = Camiao(1,0);
 
-	mapPath(g, newG);
+	brute_force_camiao(newG,c);
+
+
+	//nearestNeighbourCamiao(newG, c);
+
+	//Camiao c1 = Camiao(3, 0);
+
+	showGraph(newG);
+	cin.get();
+
+//	newG = newWorkingGraph(newG);
+//	cout << "lol"; cin.get();
+
+	brute_force_camiao(newG,c2);
+
+	showGraph(newG);
+	cin.get();
+
+	//nearestNeighbourCamiao(newG, c1);
+
+	//c.calcRotaCamiao(g);
+
+	//showGraph(newG);
+
+	//mapPath(g, newG);
 
 	showGraph(newG);
 
-	c.calcRotaCamiao(g);
+	mapPath(g, newG);
 
 	showGraph(g);
 
@@ -177,13 +172,15 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 
 	unsigned int id1, id2;
 
-	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
-		if (newGrafo.getVertexSet()[i]->path != NULL) {
-			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
-			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
-		}
+	vector<Contentor> res;
 
-		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
+	Vertex<Contentor>* actual = newGrafo.getVertexSet()[0];
+
+	while (actual->path != NULL) {
+		id1 = actual->getInfo().getId();
+		id2 = actual->path->getInfo().getId();
+
+		res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
 
 		if (res.size() != 0) {
 			for (unsigned int i = 0; i < res.size() - 1; i++) {
@@ -191,8 +188,25 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 			}
 
 		}
-
+		actual = actual->path;
 	}
+
+//	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
+//		if (newGrafo.getVertexSet()[i]->path != NULL) {
+//			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
+//			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
+//		}
+//
+//		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
+//
+//		if (res.size() != 0) {
+//			for (unsigned int i = 0; i < res.size() - 1; i++) {
+//				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo, res[i + 1].getId());
+//			}
+//
+//		}
+//
+//	}
 }
 
 void printSquareArray(int ** arr, unsigned int size) {

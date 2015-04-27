@@ -9,7 +9,7 @@
 
 unsigned int Camiao::nextId = 1;
 
-int Camiao::capacidadeMaxima=1000;
+int Camiao::capacidadeMaxima=10000;
 
 Camiao::Camiao() {
 	this->id = nextId;
@@ -18,7 +18,7 @@ Camiao::Camiao() {
 	this->distanciaPercorrida=0;
 }
 
-Camiao::Camiao(unsigned int id, unsigned int quantidadeLixo, unsigned int capacidadeMaxima) :
+Camiao::Camiao(unsigned int id, unsigned int quantidadeLixo) :
 		id(id), quantidadeLixo(quantidadeLixo) {
 	this->distanciaPercorrida=0;
 

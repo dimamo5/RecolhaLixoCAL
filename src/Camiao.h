@@ -23,7 +23,7 @@ private:
 	vector<Contentor> rota;
 public:
 	Camiao();
-	Camiao(unsigned int id,unsigned int quantidadeLixo,unsigned int capacidadeMaxima);
+	Camiao(unsigned int id,unsigned int quantidadeLixo);
 	static unsigned int getCapacidadeMaxima();
 	static void setCapacidadeMaxima(unsigned int cMaxima);
 	unsigned int getId() const;

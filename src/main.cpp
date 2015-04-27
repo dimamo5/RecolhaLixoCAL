@@ -7,7 +7,8 @@ using namespace std;
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
-Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
+void part1(Graph<Contentor> &g, Graph<Contentor> &newG);
+void part2(Graph<Contentor> g, Graph<Contentor> newG);
 
 int main() {
 
@@ -18,117 +19,31 @@ int main() {
 	lg.loadContentores(g);
 	lg.loadAdjacentes(g);
 
-	//============================
-	//g.floydWarshallShortestPath();
-
-	//	brute_force(g);
-	//	cin.get();
-	//
-	//	showGraph(g);
-	//	cin.get();
-	//============================
 	g.floydWarshallShortestPath();
 
 	newG = newWorkingGraph(g);
 
-	//newG.floydWarshallShortestPath();
+	newG.floydWarshallShortestPath();
 
-	//branchBound(newG);
+	cout << "Escolha Opção" << endl;
+	cout << "1- Camião com Capacidade Ilimitada passa por todos os pontos." << endl;
+	cout << "2- Camiões com Capacidade Limitada pelo maximo de lixo que podem recolher" << endl;
 
-	Camiao c = Camiao(3, 0);
+	char opcao = getchar();
 
-	Camiao c2 = Camiao(1,0);
+	if (opcao == '1') {
+		part1(g, newG);
+	} else if (opcao == '2') {
+		part2(g, newG);
+	}
 
-	brute_force_camiao(newG,c);
-
-
-	//nearestNeighbourCamiao(newG, c);
-
-	//Camiao c1 = Camiao(3, 0);
-
-	showGraph(newG);
-	cin.get();
-
-//	newG = newWorkingGraph(newG);
-//	cout << "lol"; cin.get();
-
-	brute_force_camiao(newG,c2);
-
-	showGraph(newG);
-	cin.get();
-
-	//nearestNeighbourCamiao(newG, c1);
-
-	//c.calcRotaCamiao(g);
-
-	//showGraph(newG);
-
-	//mapPath(g, newG);
-
-	showGraph(newG);
-
-	mapPath(g, newG);
-
-	showGraph(g);
-
-	/*newG = newWorkingGraph(g);
-	 cout << "vertices " << newG.getNumVertex() << endl;
-	 cin.get();
-
-
-
-
-	 newG.printSquareArray(newG.getW(), newG.getNumVertex());
-	 cin.get();
-
-	 brute_force(newG);
-	 cin.get();
-	 showGraph(newG);
-
-	 //cin.get();
-
-	 nearestNeighbour(newG);
-
-
-
-
-
-	 calcRotaCamiao(g, c);
-
-	 //	Camiao c = Camiao(3, 0, 15000);
-	 //	Camiao c1 = Camiao(3, 0, 1000);
-	 //
-	 //	nearestNeighbourCamiao(newG, c);
-	 //
-	 //	cout<<"Lixo Apanhado:"<<c.getQuantidadeLixo()<<endl;
-	 //
-	 //	nearestNeighbourCamiao(newG, c1);
-	 //
-	 //	cout<<"Lixo Apanhado:"<<c1.getQuantidadeLixo()<<endl;
-	 //
-	 //	cout<<"Rota tamanho:"<<c.getRota().size()<<endl;
-
-	 //cout<<newG.getVertexSet()[2]->getInfo().getQuantidadeLixo();
-	 //calcRotaCamiao(g, c);
-	 //cout << "Dist Opt:" << c.getDist() << endl;
-
-	 showGraph(g);
-
-	 //showGraph(newG);
-
-	 //return 0;
-
-	 branch_Bound(g);
-
-	 getchar();
-	 */
-	cin.get();
+	system("PAUSE");
 	return 0;
 }
 
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
-	Graph<Contentor> workingGraph = Graph<Contentor>();
+	Graph<Contentor> workingGraph;
 
 	vector<Contentor> contentorPrioritarios;
 
@@ -168,6 +83,101 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 	return workingGraph;
 }
 
+void part1(Graph<Contentor> &g, Graph<Contentor> &newG) {
+
+	char opcao2 = 'd';
+
+	clock_t t;
+	while (opcao2 != 5) {
+
+		cout << "1- Brute Force (Permutacoes)" << endl;
+		cout << "2- Branch and Bound" << endl;
+		cout << "3- Nearest neighbour" << endl;
+		cout << "4- Compara os 3" << endl;
+		cout << "5- Retornar" << endl;
+
+		cin >> opcao2;
+
+		if (opcao2 == '1') {
+			Camiao c;
+			c.setCapacidadeMaxima(INT_MAX);
+			brute_force(newG, c);
+			c.calcRotaCamiao(newG);
+			c.print();
+			cout << flush;
+			showGraph(newG);
+			mapPath(g, newG);
+			showGraph(g);
+			getchar();
+
+		} else if (opcao2 == '2') {
+			Camiao c;
+			c.setCapacidadeMaxima(INT_MAX);
+			branchBound(newG, c);
+			c.calcRotaCamiao(newG);
+			c.print();
+			cout << flush;
+			showGraph(newG);
+			mapPath(g, newG);
+			showGraph(g);
+
+		} else if (opcao2 == '3') {
+			Camiao c;
+			c.setCapacidadeMaxima(INT_MAX);
+			nearestNeighbour(newG, c);
+			c.calcRotaCamiao(newG);
+			c.print();
+			cout << flush;
+			showGraph(newG);
+			mapPath(g, newG);
+			showGraph(g);
+		} else if (opcao2 == '4') {
+			Camiao c;
+			c.setCapacidadeMaxima(INT_MAX);
+			cout << "Nearest neighbour:" << endl;
+			t = clock();
+			nearestNeighbour(newG, c);
+			t = clock() - t;
+			cout << "Ticks:" << t << endl;
+
+			cout << "Brute Force:" << endl;
+			t = clock();
+			brute_force(newG, c);
+			t = clock() - t;
+			cout << "Ticks:" << t << endl;
+
+			cout << "Branch And Bound:" << endl;
+			t = clock();
+			branchBound(newG, c);
+			t = clock() - t;
+			cout << "Ticks:" << t << endl;
+		} else if (opcao2 == '5') {
+			return;
+		}
+		cout << endl << "Permir novamente para sair!" << endl;
+		cout << flush;
+		cin.get();
+	}
+
+}
+
+void part2(Graph<Contentor> g, Graph<Contentor> newG) {
+
+	Camiao c1;
+	nearestNeighbourCamiao(newG, c1);
+	c1.calcRotaCamiao(newG);
+
+	showGraph(newG);
+
+	mapPath(g, newG);
+
+	showGraph(g);
+
+	c1.print();
+
+	Camiao c2;
+}
+
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 
 	unsigned int id1, id2;
@@ -179,6 +189,7 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 	while (actual->path != NULL) {
 		id1 = actual->getInfo().getId();
 		id2 = actual->path->getInfo().getId();
+//		cout<<" id1:"<<id1<<" id2:"<<id2<<"->";
 
 		res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
 
@@ -188,25 +199,11 @@ void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 			}
 
 		}
+		cout << actual->getInfo().getId()<<"  ";
 		actual = actual->path;
-	}
 
-//	for (unsigned int i = 0; i < newGrafo.getNumVertex(); i++) {
-//		if (newGrafo.getVertexSet()[i]->path != NULL) {
-//			id1 = newGrafo.getVertexSet()[i]->getInfo().getId();
-//			id2 = newGrafo.getVertexSet()[i]->path->getInfo().getId();
-//		}
-//
-//		vector<Contentor> res = grafo.getfloydWarshallPath(Contentor(id1, "Inicio", 0, 0), Contentor(id2, "Inicio", 0, 0));
-//
-//		if (res.size() != 0) {
-//			for (unsigned int i = 0; i < res.size() - 1; i++) {
-//				findVertexId(grafo, res[i].getId())->path = findVertexId(grafo, res[i + 1].getId());
-//			}
-//
-//		}
-//
-//	}
+		res.clear();
+	}
 }
 
 void printSquareArray(int ** arr, unsigned int size) {

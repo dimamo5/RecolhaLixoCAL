@@ -78,8 +78,6 @@ void Camiao::calcRotaCamiao(Graph<Contentor> &grafo) {
 
 	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
 
-	this->addContentor(actual->getInfo());
-
 	while (actual->path != NULL) {
 
 		for (unsigned int i = 0; i < actual->getAdj().size(); i++) {
@@ -88,8 +86,14 @@ void Camiao::calcRotaCamiao(Graph<Contentor> &grafo) {
 				break;
 			}
 		}
-
-		this->addContentor(actual->path->getInfo());
 		actual = actual->path;
+	}
+}
+
+void Camiao::print(){
+	cout<<"Distancia percorrida:"<<this->distanciaPercorrida<<"\tQuantidade Lixo:"<<quantidadeLixo<<endl;
+	cout<<"Rota:";
+	for(int i =0;i<rota.size();i++){
+		cout<<rota[i].getId()<<"\t";
 	}
 }

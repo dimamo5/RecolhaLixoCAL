@@ -2,7 +2,7 @@
 
 int bound, row, col, size, *pencost;
 
-void branchBound(Graph<Contentor> &grafo) {
+void branchBound(Graph<Contentor> &grafo,Camiao &c) {
 
 	vector<int> path;
 
@@ -29,6 +29,7 @@ void branchBound(Graph<Contentor> &grafo) {
 
 	for (unsigned int i = 0; i < path.size() - 1; i++) {
 		grafo.getVertexSet()[path[i]]->path = grafo.getVertexSet()[path[i + 1]];
+		c.addContentor(grafo.getVertexSet()[path[i]]->getInfo());
 	}
 
 }

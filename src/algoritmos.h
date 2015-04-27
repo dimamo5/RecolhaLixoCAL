@@ -3,14 +3,14 @@
 #include "Camiao.h"
 
 void iguala_arrays(int v[], int a[], int size);
-void brute_force(Graph<Contentor> &grafo);
+void brute_force(Graph<Contentor> &grafo,Camiao &c);
 void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c);
 
-void nearestNeighbour(Graph<Contentor> &grafo);
+void nearestNeighbour(Graph<Contentor> &grafo, Camiao &c);
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id);
 void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c);
 
-void branchBound(Graph<Contentor> &grafo);
+void branchBound(Graph<Contentor> &grafo,Camiao &c);
 void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W);
 
 int checkBounds(int orig, int dest, int**w, int size);

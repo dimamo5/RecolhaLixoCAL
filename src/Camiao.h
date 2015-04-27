@@ -37,6 +37,7 @@ public:
 	void addDist(unsigned int d);
 	unsigned int getDist() const;
 	void calcRotaCamiao(Graph<Contentor> &grafo);
+	void print();
 
 
 };

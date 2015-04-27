@@ -26,9 +26,9 @@ void showGraph(Graph<Contentor> &grafo) {
 	for (unsigned int i = 0; i < grafo.getVertexSet().size(); i++) {
 		id1 = grafo.getVertexSet()[i]->getInfo().getId();
 		s = grafo.getVertexSet()[i]->getInfo().getRua();
-		ss<<grafo.getVertexSet()[i]->getInfo().getQuantidadeLixo();
+		ss << grafo.getVertexSet()[i]->getInfo().getQuantidadeLixo();
 		gv->addNode(id1);
-		gv->setVertexLabel(id1, s+" "+ ss.str());
+		gv->setVertexLabel(id1, s + " " + ss.str());
 
 		ss.str("");
 

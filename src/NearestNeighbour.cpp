@@ -1,10 +1,11 @@
 #include "algoritmos.h"
 
-void nearestNeighbour(Graph<Contentor> &grafo) {
+void nearestNeighbour(Graph<Contentor> &grafo,Camiao &c) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		grafo.getVertexSet()[i]->setVisited(false);
 	}
 	Vertex<Contentor>* actual = grafo.getVertexSet()[0];
+	c.addContentor(actual->getInfo());
 	Vertex<Contentor>* proximo;
 	unsigned int pesoMinimo = INT_INFINITY;
 	actual->setVisited(true);
@@ -22,6 +23,7 @@ void nearestNeighbour(Graph<Contentor> &grafo) {
 		}
 		if (!(proximo->getInfo() == actual->getInfo())) {
 			actual->path = proximo;
+			c.addContentor(proximo->getInfo());
 		}
 		actual = proximo;
 		actual->setVisited(true);
@@ -49,7 +51,7 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		for (unsigned int j = 0; j < actual->getAdj().size(); j++) {
 
-			if (actual->getAdj()[j].getDest()->getInfo().getQuantidadeLixo() > lixoMaior && !actual->getAdj()[j].getDest()->isVisited()) {
+			if (actual->getAdj()[j].getDest()->getInfo().getQuantidadeLixo() > lixoMaior && !(actual->getAdj()[j].getDest()->isVisited())) {
 				if ((actual->getAdj()[j].getDest()->getInfo().getQuantidadeMaxima() == 0)) {
 					continue;
 				} else {
@@ -60,6 +62,8 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 				}
 			}
 		}
+
+		actual->setVisited(true);
 
 		//Acabou apanhar lixo
 		if (actual->getInfo() == proximo->getInfo()) {
@@ -75,7 +79,6 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 		}
 
 		actual = proximo;
-		actual->setVisited(true);
 		lixoMaior = 0;
 	}
 

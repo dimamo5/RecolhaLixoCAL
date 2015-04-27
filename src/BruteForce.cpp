@@ -8,7 +8,7 @@ void iguala_arrays(int v[], int a[], int size) {
 	}
 }
 
-void brute_force(Graph<Contentor> &grafo) {
+void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 
 	int sum = 0, min_dist = INT_INFINITY;
 	int size = grafo.getNumVertex();
@@ -40,14 +40,15 @@ void brute_force(Graph<Contentor> &grafo) {
 
 	for (unsigned int i = 0; i < size - 1; i++) {
 		grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
+		c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
 	}
 
 
 }
 
-void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
+/*void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
 
-	int size =0;
+	int size =0,indice;
 
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		grafo.getVertexSet()[i]->path = NULL;
@@ -137,4 +138,4 @@ void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
 
 	cout <<"capacidade camiao " <<  c.getQuantidadeLixo() << endl;
 }
-
+*/

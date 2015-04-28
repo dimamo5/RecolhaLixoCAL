@@ -48,13 +48,13 @@ void showGraph(Graph<Contentor> &grafo) {
 			id2 = grafo.getVertexSet()[vert]->getAdj()[edge].getDest()->getInfo().getId();
 
 			if (grafo.getVertexSet()[vert]->path != NULL && grafo.getVertexSet()[vert]->path->getInfo().getId() == id2) {
-				gv->setEdgeColor(id1 * 100 + id2, "green");
-				gv->setEdgeThickness(id1 * 100 + id2, 5);
+				gv->setEdgeColor(id1 * 1000 + id2, "green");
+				gv->setEdgeThickness(id1 * 1000 + id2, 5);
 			}
 
-			gv->addEdge(id1 * 100 + id2, id1, id2, EdgeType::DIRECTED);
+			gv->addEdge(id1 * 1000 + id2, id1, id2, EdgeType::DIRECTED);
 
-			gv->setEdgeWeight(id1 * 100 + id2, grafo.getVertexSet()[vert]->getAdj()[edge].getWeight());
+			gv->setEdgeWeight(id1 * 1000 + id2, grafo.getVertexSet()[vert]->getAdj()[edge].getWeight());
 			ss.str("");
 		}
 	}

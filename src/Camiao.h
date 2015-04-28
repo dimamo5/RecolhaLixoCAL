@@ -19,8 +19,8 @@ private:
 	unsigned int id;
 	unsigned int quantidadeLixo;
 	unsigned int distanciaPercorrida;
-
 	vector<Contentor> rota;
+
 public:
 	Camiao();
 	Camiao(unsigned int id,unsigned int quantidadeLixo);

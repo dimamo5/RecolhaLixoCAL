@@ -2,6 +2,7 @@
 #include "Visualizador/showgraph.h"
 #include "windows.h"
 #include "algoritmos.h"
+#include <ctime>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo);
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo);
 void part1(Graph<Contentor> &g, Graph<Contentor> &newG);
 void part2(Graph<Contentor> &g, Graph<Contentor> &newG);
-bool hasPrioritarios(Graph<Contentor> grafo);
+bool hasPrioritarios(Graph<Contentor> &grafo);
 void menu(Graph<Contentor> &g);
 
 int main() {
@@ -172,11 +173,12 @@ void part2(Graph<Contentor> &g, Graph<Contentor> &newG) {
 
 	char opcao;
 
-	showGraph(g);
+	//showGraph(g);
 
 	cout << "1- Nearest Neighbour adaptado" << endl;
 	cout << "2- Brute Force" << endl;
-	cout << "3- Retornar" << endl;
+	cout<< "3- Alterar Capacidade Camiões"<<endl;
+	cout << "4- Retornar" << endl;
 
 	cin >> opcao;
 
@@ -190,13 +192,23 @@ void part2(Graph<Contentor> &g, Graph<Contentor> &newG) {
 		menu(g);
 	} else if (opcao == '2') {
 		while (hasPrioritarios(newG)) {
+			cout<<hasPrioritarios(newG);
 			Camiao c;
 			brute_force_camiao(newG, c);
 			c.calcRotaCamiao(newG);
 			c.print();
+
 		}
+		cout<<"teste2";
 		menu(g);
 	} else if (opcao == '3') {
+		int tamanho;
+		cout<<"Novo tamanho: ";
+		cin>>tamanho;
+		Camiao::setCapacidadeMaxima(tamanho);
+		cout<<"Tamanho Camiao:"<<Camiao::getCapacidadeMaxima()<<endl;
+		menu(g);
+	}else if(opcao=='4'){
 		menu(g);
 	}
 }
@@ -262,7 +274,7 @@ void printSquareArray(int ** arr, unsigned int size) {
 	}
 }
 
-bool hasPrioritarios(Graph<Contentor> grafo) {
+bool hasPrioritarios(Graph<Contentor> &grafo) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			return true;

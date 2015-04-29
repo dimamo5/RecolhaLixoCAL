@@ -5,6 +5,10 @@
 
 using namespace std;
 
+/**
+ * Classe representativa de um Contentor
+ * Este contem a rua em que este se localiza, a quantidade de lixo e a sua capacidade maxima
+ */
 class Contentor {
 private:
 	static unsigned int nextId;

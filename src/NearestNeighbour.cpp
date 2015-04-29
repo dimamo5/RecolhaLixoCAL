@@ -1,5 +1,8 @@
 #include "algoritmos.h"
 
+/**
+ * Aplicacao de o algoritmo Nearest Neighbour ao Grafo par resolucao do TSP com camiao de tamanho ilimitado
+ */
 void nearestNeighbour(Graph<Contentor> &grafo,Camiao &c) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		grafo.getVertexSet()[i]->setVisited(false);
@@ -33,6 +36,9 @@ void nearestNeighbour(Graph<Contentor> &grafo,Camiao &c) {
 
 }
 
+/**
+ * Aplicacao de o algoritmo Nearest Neighbour ao Grafo par resolucao do TSP com camiao de tamanho limitado
+ */
 void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
 		grafo.getVertexSet()[i]->path = NULL;
@@ -84,6 +90,9 @@ void nearestNeighbourCamiao(Graph<Contentor> &grafo, Camiao &c) {
 
 }
 
+/**
+ * Encontra um vertice no grafo pelo seu id e retorna a posicao de memoria
+ */
 Vertex<Contentor>* findVertexId(Graph<Contentor> &grafo, int id) {
 	for (unsigned int j = 0; j < grafo.getVertexSet().size(); j++) {
 		if (id == grafo.getVertexSet()[j]->getInfo().getId()) {

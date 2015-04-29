@@ -2,7 +2,7 @@
 
 int bound, row, col, size, *pencost;
 /**
- * Implements branch and bound algorithm
+ * Implementação do algoritmo branch and bound
  */
 void branchBound(Graph<Contentor> &grafo,Camiao &c) {
 
@@ -46,7 +46,7 @@ void branchBound(Graph<Contentor> &grafo,Camiao &c) {
 }
 
 /**
- * Função que calcula o bound para as várias subarvores
+ * Função que calcula o bound para as várias sub-arvores
  */
 void branchBoundRec(Graph<Contentor> &grafo, vector<int> &path, int id, int** W) {
 
@@ -125,7 +125,7 @@ int checkBounds(int orig, int dest, int**w, int size) {
 }
 
 /**
- * Cálculo da linha minima
+ * Cálculo da menor celula de uma determinada linha
  */
 int calcMinRow(int ** W, int size, int row) {
 	unsigned int min = INT_MAX;
@@ -140,7 +140,7 @@ int calcMinRow(int ** W, int size, int row) {
 }
 
 /**
- * Cálculo da coluna minima
+ * Cálculo da menor celula da coluna
  */
 int calcMinColumn(int ** W, int size, int col) {
 	unsigned int min = INT_MAX;
@@ -155,7 +155,7 @@ int calcMinColumn(int ** W, int size, int col) {
 	return min;
 }
 /**
- * redução de linha
+ * Reducao da menor celula a todas as celulas da linha
  */
 int rowReduction(int ** w, int size) {
 
@@ -177,7 +177,7 @@ int rowReduction(int ** w, int size) {
 }
 
 /**
- * redução de coluna
+ * Reducao da menor celula a todas as celulas da coluna
  */
 int colReduction(int **w, int size) {
 
@@ -211,8 +211,9 @@ bool visitedPath(vector<int> &path, int id) {
 }
 
 /**
- * retorna o índice do vértice caso exista
+ * Retorna o índice do vértice caso exista
  */
+
 int getVertexIndice(Graph<Contentor> &grafo, int id) {
 	for (int i = 0; i < grafo.getNumVertex(); i++) {
 		if (grafo.getVertexSet()[i]->getInfo().getId() == id) {

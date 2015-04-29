@@ -49,6 +49,9 @@ void menu(Graph<Contentor> &g) {
 	}
 }
 
+/**
+ * Filtragem do grafo e criacao de um novo grafo apenas com os caixotes prioritarios e o ponto inicial(central) e ponto final(recolha)
+ */
 Graph<Contentor> newWorkingGraph(Graph<Contentor> &grafo) {
 
 	Graph<Contentor> workingGraph;
@@ -213,6 +216,9 @@ void part2(Graph<Contentor> &g, Graph<Contentor> &newG) {
 	}
 }
 
+/**
+ * Mapeamento do caminho do grafo de trabalho para o novo grafo final
+ */
 void mapPath(Graph<Contentor> &grafo, Graph<Contentor> &newGrafo) {
 
 	unsigned int id1, id2;
@@ -274,8 +280,11 @@ void printSquareArray(int ** arr, unsigned int size) {
 	}
 }
 
+/**
+ * Verifica se ainda existem contentores prioritarios no grafo
+ */
 bool hasPrioritarios(Graph<Contentor> &grafo) {
-	for (unsigned int i = 0; i < grafo.getNumVertex(); i++) {
+	for (int i = 0; i < grafo.getNumVertex(); i++) {
 		if (grafo.getVertexSet()[i]->getInfo().isPrioritario()) {
 			return true;
 		}

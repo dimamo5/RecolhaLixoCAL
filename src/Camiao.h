@@ -12,6 +12,11 @@
 #include "Graph.h"
 #include <vector>
 
+/**
+ * Classe representativa de um camiao
+ * Cada camiao contem uma capacidade maxima comum a todos os camioes, a quantidade de lixo no momento,
+ * a distancia que percorreu, e a rota
+ */
 class Camiao {
 private:
 	static int capacidadeMaxima;

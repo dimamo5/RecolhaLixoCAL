@@ -74,10 +74,5 @@ bool LoadGraph::loadAdjacentes(Graph<Contentor> &grafo) {
 				Contentor(idV2, "tempVertex2", 0, 0), peso,0);
 
 	}
-
-//	cout<<grafo.getNumVertex()<<endl;
-//	cout<<grafo.getVertexSet()[0]->getAdj()[0].getDest()->getInfo().getId()<<endl;
-//	cout<<grafo.getVertexSet()[0]->getAdj()[1].getDest()->getInfo().getId()<<endl;
-
 	return true;
 }

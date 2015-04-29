@@ -12,7 +12,7 @@ void iguala_arrays(int v[], int a[], int size) {
 }
 
 /**
- * Algoritmo de brute-force com premutações para resolução de um problema do tipo TSP
+ * Algoritmo de brute-force com permutações para resolução de um problema do tipo TSP
  */
 void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 
@@ -25,7 +25,7 @@ void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 		vert[i] = i;
 	}
 
-	//Enquanto for possivel permutar elementos
+	//Enquanto existirem permutações
 	while (std::next_permutation(vert + 1, vert + size - 1)) {
 
 		//começa a somar as distâncias entre vértices e verifica se são menores que as anteriores
@@ -53,6 +53,9 @@ void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 	}
 }
 
+/**
+ * Brute Force aplicado a Camioes de tamanho limitado
+ */
 void brute_force_camiao(Graph<Contentor> &grafo,Camiao &c) {
 
 	int sum = 0, max_peso = 0 ,size =0, indice, indice_glob;

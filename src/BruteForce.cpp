@@ -1,6 +1,9 @@
 #include "algoritmos.h"
 #include <algorithm>
 
+/**
+ * Iguala todos os elementos de 2 arrays
+ */
 void iguala_arrays(int v[], int a[], int size) {
 
 	for (int i = 0; i < size; i++) {
@@ -8,6 +11,9 @@ void iguala_arrays(int v[], int a[], int size) {
 	}
 }
 
+/**
+ * Algoritmo de brute-force com premutações para resolução de um problema do tipo TSP
+ */
 void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 
 	int sum = 0, min_dist = INT_INFINITY;
@@ -19,8 +25,10 @@ void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 		vert[i] = i;
 	}
 
+	//Enquanto for possivel permutar elementos
 	while (std::next_permutation(vert + 1, vert + size - 1)) {
 
+		//começa a somar as distâncias entre vértices e verifica se são menores que as anteriores
 		for (int i = 0; i < size - 1; i++) {
 
 			if (grafo.getW()[vert[i]][vert[i + 1]] == INT_INFINITY)
@@ -31,13 +39,14 @@ void brute_force(Graph<Contentor> &grafo,Camiao &c) {
 			else break; //se der porcaria e por causa disto
 		}
 
+		//se o somatório for menor que a distancia minima anterior passa a ser ela a nova min_dist
 		if (sum < min_dist) {
 			min_dist = sum;
 			iguala_arrays(route, vert, size);
 		}
 		sum = 0;
 	}
-
+//construção do caminho
 	for (unsigned int i = 0; i < size - 1; i++) {
 		grafo.getVertexSet()[route[i]]->path = grafo.getVertexSet()[route[i + 1]];
 		c.addContentor(grafo.getVertexSet()[route[i]]->getInfo());
